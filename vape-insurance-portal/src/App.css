@@ -1,0 +1,30 @@
+/* Global Roboto Font Application */
+* {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+/* Ant Design Component Font Override */
+.ant-typography,
+.ant-btn,
+.ant-input,
+.ant-select,
+.ant-card,
+.ant-form-item-label,
+.ant-form-item-control,
+.ant-alert,
+.ant-steps-item-title,
+.ant-steps-item-description {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+/* Headings with Roboto */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto', sans-serif !important;
+  font-weight: 500;
+}
+
+/* Button text */
+button, .ant-btn {
+  font-family: 'Roboto', sans-serif !important;
+  font-weight: 500;
+}

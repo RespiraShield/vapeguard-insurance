@@ -1,0 +1,256 @@
+/* PaymentStep Component Styles - Razorpay Exact Match */
+
+.paymentContainer {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  background: white;
+}
+
+.paymentHeader {
+  margin-bottom: 16px;
+}
+
+.paymentTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #212121;
+  margin-bottom: 4px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.paymentSubtitle {
+  font-size: 14px;
+  color: #7c7c7c;
+  font-weight: 400;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+}
+
+.paymentContent {
+  margin-bottom: 12px;
+}
+
+.paymentMethods {
+  width: 100%;
+}
+
+.methodsList {
+  width: 100%;
+}
+
+.methodOption {
+  width: 100%;
+  height: auto;
+  padding: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  background: white;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.methodOption:hover {
+  border-color: #528ff0;
+}
+
+.methodOption.selectedMethod {
+  border-color: #528ff0;
+  background: #f8fbff;
+}
+
+.methodLayout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  width: 100%;
+}
+
+.methodLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.methodIconWrapper {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #666;
+}
+
+.methodDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.methodNameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.methodName {
+  font-size: 14px;
+  font-weight: 500;
+  color: #212121;
+  font-family: 'Roboto', sans-serif;
+}
+
+.popularTag {
+  background: #e8f4fd;
+  color: #1890ff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 2px;
+  letter-spacing: 0.3px;
+}
+
+.methodDesc {
+  font-size: 12px;
+  color: #7c7c7c;
+  font-family: 'Roboto', sans-serif;
+}
+
+.checkIcon {
+  color: #1890ff;
+  font-size: 16px;
+}
+
+.paymentForm {
+  margin-top: 12px;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #fafafa;
+}
+
+.formHeader {
+  margin-bottom: 12px;
+}
+
+.formTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #212121;
+  font-family: 'Roboto', sans-serif;
+}
+
+.paymentInput {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  background: white;
+}
+
+.paymentInput:focus {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.bankSelect {
+  width: 100%;
+}
+
+.bankSelect .ant-select-selector {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.bankSelect:focus .ant-select-selector {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.inputError {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: 6px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.inputHint {
+  font-size: 12px;
+  color: #7c7c7c;
+  margin-top: 6px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.paymentError {
+  color: #ff4d4f;
+  font-size: 14px;
+  margin-top: 16px;
+  padding: 12px;
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: 4px;
+  font-family: 'Roboto', sans-serif;
+}
+
+
+
+@media (max-width: 768px) {
+  .paymentContainer {
+    padding: 20px 16px;
+  }
+  
+  .paymentTitle {
+    font-size: 18px;
+  }
+  
+  .methodLayout {
+    padding: 14px;
+  }
+}
+
+/* Ant Design Radio Button Overrides */
+.methodOption .ant-radio-button-wrapper {
+  border: none;
+  background: transparent;
+  padding: 0;
+  height: auto;
+}
+
+.methodOption .ant-radio-button-wrapper:before {
+  display: none;
+}
+
+.methodOption .ant-radio-button-wrapper:hover {
+  color: inherit;
+}
+
+.methodOption .ant-radio-button-wrapper-checked {
+  background: transparent;
+  border: none;
+  color: inherit;
+}
+
+.methodOption .ant-radio-button-wrapper-checked:hover {
+  background: transparent;
+}
+
+.securityNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+  font-size: 12px;
+  color: #7c7c7c;
+  font-family: 'Roboto', sans-serif;
+}
+
+.securityIcon {
+  color: #52c41a;
+  font-size: 14px;
+}

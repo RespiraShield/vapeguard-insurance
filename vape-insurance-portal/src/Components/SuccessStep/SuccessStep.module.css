@@ -1,0 +1,237 @@
+/* Clean Success Step Styles */
+
+.successContainer {
+  padding: 2rem;
+  background: transparent;
+}
+
+.stepCard {
+  background: transparent;
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+}
+
+.celebrationHeader {
+  margin-bottom: 2.5rem;
+}
+
+.successIcon {
+  font-size: 80px;
+  color: #10b981;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.successTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.successSubtitle {
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.detailsSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.detailCard {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.detailCard:hover {
+  border-color: #528ff0;
+}
+
+.cardLayout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  width: 100%;
+}
+
+.cardLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cardDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardLabel {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.statusBadge {
+  display: inline-block;
+  background: #10b981;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.nextStepsSection {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.nextStepsTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nextStepsIcon {
+  font-size: 1.2rem;
+  color: #667eea;
+}
+
+.nextStepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nextStepItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nextStepItem:hover {
+  background: #f1f5f9;
+}
+
+.nextStepIcon {
+  color: #10b981;
+  font-size: 1rem;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+}
+
+.nextStepText {
+  color: #374151;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.celebrationFooter {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .successContainer {
+    padding: 1rem;
+  }
+  
+  .stepCard {
+    padding: 2rem 1.5rem;
+  }
+  
+  .successTitle {
+    font-size: 1.75rem;
+  }
+  
+  .successIcon {
+    font-size: 60px;
+  }
+  
+  .detailsSection {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .nextStepsSection {
+    padding: 1.25rem;
+  }
+  
+  .nextStepsTitle {
+    font-size: 1rem;
+  }
+  
+  .nextStepText {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .successContainer {
+    padding: 0.5rem;
+  }
+  
+  .stepCard {
+    padding: 1.5rem 1rem;
+  }
+  
+  .successTitle {
+    font-size: 1.5rem;
+  }
+  
+  .successIcon {
+    font-size: 50px;
+  }
+  
+  .celebrationHeader {
+    margin-bottom: 1.5rem;
+  }
+  
+  .detailCard {
+    padding: 1rem;
+  }
+  
+  .applicationNumber {
+    font-size: 1rem;
+  }
+  
+  .nextStepsSection {
+    padding: 1rem;
+  }
+}

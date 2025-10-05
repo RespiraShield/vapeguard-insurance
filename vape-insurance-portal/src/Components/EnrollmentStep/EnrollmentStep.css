@@ -1,0 +1,228 @@
+.enrollment-step {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.enrollment-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.enrollment-header h2 {
+  color: #1a1a1a;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.enrollment-subtitle {
+  color: #6b7280;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.enrollment-card {
+  background: #ffffff;
+  border: 2px dashed #e5e7eb;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.plan-summary {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.plan-summary h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+}
+
+.plan-price {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.enrollment-benefits {
+  margin-bottom: 30px;
+}
+
+.enrollment-benefits h4 {
+  color: #1a1a1a;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.benefit-icon {
+  width: 20px;
+  height: 20px;
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.plan-features {
+  margin-bottom: 30px;
+}
+
+.plan-features h4 {
+  color: #1a1a1a;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.feature-item:last-child {
+  border-bottom: none;
+}
+
+.feature-bullet {
+  color: #667eea;
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.enrollment-notice {
+  margin-bottom: 30px;
+}
+
+.notice-box {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.notice-box h4 {
+  color: #92400e;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+}
+
+.notice-box p {
+  color: #92400e;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.enrollment-actions {
+  text-align: center;
+}
+
+.enroll-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 15px;
+}
+
+.enroll-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.enroll-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.enrollment-terms {
+  margin-top: 15px;
+}
+
+.enrollment-terms p {
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.error-message {
+  text-align: center;
+  color: #dc2626;
+  font-size: 1.1rem;
+  padding: 20px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .enrollment-step {
+    padding: 15px;
+  }
+  
+  .enrollment-card {
+    padding: 20px;
+  }
+  
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .enrollment-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .plan-price {
+    font-size: 1.5rem;
+  }
+}

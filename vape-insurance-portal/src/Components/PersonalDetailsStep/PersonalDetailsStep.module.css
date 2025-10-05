@@ -1,0 +1,471 @@
+/* PersonalDetailsStep Component Styles */
+
+.personalDetailsContainer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.formCard {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  padding: 24px 16px;
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .formCard {
+    padding: 40px;
+    border-radius: 16px;
+  }
+  
+  .personalDetailsContainer {
+    padding: 20px;
+  }
+}
+
+.formCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0px;
+  background: none;
+}
+
+.stepHeader {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.stepTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+  .stepTitle {
+    font-size: 28px;
+  }
+}
+
+.stepSubtitle {
+  font-size: 16px;
+  color: #64748b;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.formSection {
+  margin-bottom: 32px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sectionIcon {
+  width: 24px;
+  height: 24px;
+  background: #3b82f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+}
+
+.inputGroup {
+  position: relative;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.inputLabel {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* Required field indicator is now handled in the component */
+.requiredField {
+  color: inherit;
+}
+
+.styledInput {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  padding: 14px 16px;
+  font-size: 16px;
+  height: 50px;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.styledInput:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.styledInput:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.inputWithIcon {
+  position: relative;
+  width: 100%;
+  display: block;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  z-index: 2;
+}
+
+.inputWithIcon .styledInput {
+  padding-left: 48px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.otpSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+@media (min-width: 576px) {
+  .otpSection {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}
+
+.otpButton {
+  border-radius: 8px;
+  height: 50px;
+  font-weight: 600;
+  white-space: nowrap;
+  width: 100%;
+  margin-top: 8px;
+}
+
+@media (min-width: 576px) {
+  .otpButton {
+    width: auto;
+    min-width: 160px;
+    margin-top: 0;
+  }
+}
+
+.otpButton:hover {
+  background: #2563eb;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.otpInput {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.otpInputSection {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.verificationSuccess {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  color: #166534;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.successIcon {
+  font-size: 20px;
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.otpInput {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.verifyButton {
+  background: #10b981;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  height: 40px;
+  padding: 0 20px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+  transition: all 0.3s ease;
+}
+
+.verifyButton:hover {
+  background: #059669;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.filePreview {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fileIcon {
+  color: #10b981;
+  font-size: 18px;
+}
+
+.removeFileButton {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+.removeFileButton:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.uploadDragger {
+  border: none !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  padding: 0 !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  min-height: 100px !important;
+}
+
+.uploadDragger .ant-upload {
+  background: none !important;
+  border: 2px dashed #d1d5db !important;
+  border-radius: 8px !important;
+  padding: 20px !important;
+  transition: border-color 0.3s ease !important;
+}
+
+.uploadDragger .ant-upload-drag {
+  background: none !important;
+  border: none !important;
+  padding: 20px !important;
+}
+
+.uploadDragger .ant-upload:hover {
+  border-color: #3b82f6 !important;
+  background: #f8fafc !important;
+}
+
+.uploadDragger:hover {
+  border-color: #3b82f6 !important;
+  background: #f8fafc !important;
+}
+
+.uploadDragger .ant-upload-drag-container {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 100% !important;
+}
+
+.uploadIcon {
+  font-size: 48px;
+  color: #3b82f6;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.uploadText {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  margin-bottom: 8px !important;
+  display: block !important;
+}
+
+.uploadHint {
+  font-size: 14px !important;
+  color: #6b7280 !important;
+  line-height: 1.4 !important;
+  display: block !important;
+  margin-top: 8px !important;
+}
+
+.citySelect {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.citySelect .ant-select-selector {
+  border-radius: 8px !important;
+  border: 2px solid #e5e7eb !important;
+  padding: 12px 16px !important;
+  height: 50px !important;
+  min-height: 50px !important;
+}
+
+.citySelect .ant-select-selector:hover {
+  border-color: #3b82f6 !important;
+}
+
+.citySelect.ant-select-focused .ant-select-selector {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.datePickerStyled {
+  width: 100%;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  padding: 14px 16px;
+  height: 50px;
+}
+
+.datePickerStyled:hover {
+  border-color: #3b82f6;
+}
+
+.datePickerStyled.ant-picker-focused {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.errorMessage {
+  display: flex;
+  align-items: center;
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 4px;
+  gap: 4px;
+}
+
+.errorIcon {
+  margin-right: 4px;
+}
+
+.filePreview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  margin-top: 12px;
+}
+
+.fileIcon {
+  color: #10b981;
+  font-size: 16px;
+}
+
+.removeFileButton {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.removeFileButton:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .personalDetailsContainer {
+    padding: 16px;
+  }
+  
+  .formCard {
+    padding: 24px;
+    border-radius: 16px;
+  }
+  
+  .stepTitle {
+    font-size: 24px;
+  }
+  
+  .otpSection {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .otpButton {
+    width: 100%;
+  }
+}
