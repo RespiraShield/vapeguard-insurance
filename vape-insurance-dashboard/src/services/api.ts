@@ -1,4 +1,4 @@
-// API service for VapeGuard Insurance Dashboard
+// API service for RespiraShield Insurance Dashboard
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import axios from 'axios';
 import { User, DashboardData, MonthlyPayment, ApiResponse } from '../types';

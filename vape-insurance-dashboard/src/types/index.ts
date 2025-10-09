@@ -1,4 +1,4 @@
-// Type definitions for VapeGuard Insurance Dashboard
+// Type definitions for RespiraShield Insurance Dashboard
 
 export interface User {
   _id: string;

@@ -1,4 +1,4 @@
-// Login Form Component for VapeGuard Insurance Dashboard
+// Login Form Component for RespiraShield Insurance Dashboard
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message, Divider } from 'antd';
 import { MailOutlined, SafetyOutlined, ArrowLeftOutlined } from '@ant-design/icons';
@@ -106,7 +106,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onRedirectToRegistration }) => {
         <div className="login-header">
           <div className="logo-section">
             <SafetyOutlined className="logo-icon" />
-            <Title level={2} className="app-title">VapeGuard</Title>
+            <Title level={2} className="app-title">RespiraShield</Title>
           </div>
           <Text className="login-subtitle">Insurance Dashboard</Text>
         </div>
@@ -231,9 +231,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onRedirectToRegistration }) => {
         <div className="registration-link">
           <Text>Don't have an account? </Text>
           <Link
-            onClick={onRedirectToRegistration || (() => window.location.href = 'http://localhost:3000')}
+            onClick={onRedirectToRegistration || (() => window.location.href = 'https://app.respirashield.com')}
           >
-            Register for VapeGuard Insurance
+            Register for RespiraShield Insurance
           </Link>
         </div>
       </Card>
