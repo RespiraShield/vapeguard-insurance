@@ -1,4 +1,4 @@
-// Authentication Context for VapeGuard Insurance Dashboard
+// Authentication Context for RespiraShield Insurance Dashboard
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import { AuthState, User } from '../types';
 import { 
