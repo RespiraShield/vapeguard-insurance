@@ -28,11 +28,8 @@ const PersonalDetailsStep = ({
   // isPhoneVerified = false
 }) => {
   const [emailOTP, setEmailOTP] = useState('');
-  // const [phoneOTP, setPhoneOTP] = useState('');
   const [emailOTPSent, setEmailOTPSent] = useState(false);
-  // const [phoneOTPSent, setPhoneOTPSent] = useState(false);
   const [loadingEmailOTP, setLoadingEmailOTP] = useState(false);
-  // const [loadingPhoneOTP, setLoadingPhoneOTP] = useState(false);
 
   // Refs for form fields to enable scrolling to errors
   const nameRef = useRef(null);
@@ -451,11 +448,17 @@ const PersonalDetailsStep = ({
                           <Input
                             name="phone"
                             value={formData.phone || ''}
-                            onChange={handleInputChange}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, '');
+                              if (value.length <= 10) {
+                                handleInputChange({ target: { name: 'phone', value } });
+                              }
+                            }}
                             onBlur={handleBlur}
                             placeholder={PERSONAL_DETAILS_STEP.FORM.PHONE.PLACEHOLDER}
                             className={styles.styledInput}
                             size="large"
+                            maxLength={10}
                           />
                         </div>
                       </div>

@@ -53,6 +53,50 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
   const showPlanModal = () => setIsModalVisible(true);
   const handleModalClose = () => setIsModalVisible(false);
 
+  // Determine activation steps status based on application data
+  const getActivationStatus = () => {
+    if (!dashboardData?.applications || dashboardData.applications.length === 0) {
+      return {
+        planSelected: false,
+        detailsVerified: false,
+        paymentPending: false,
+        progress: 0
+      };
+    }
+
+    // Get most recent application
+    const sortedApps = [...dashboardData.applications].sort((a: any, b: any) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    const latestApp = sortedApps[0];
+
+    // Check if plan is selected (has insurancePlanId)
+    const planSelected = !!latestApp.insurancePlanId || !!latestApp.insurancePlan;
+    
+    // Check if details are verified (status is submitted or beyond)
+    const detailsVerified = ['submitted', 'under_review', 'approved', 'payment_pending', 'completed'].includes(latestApp.status);
+    
+    // Check payment status
+    const paymentPending = latestApp.status === 'payment_pending';
+    const paymentCompleted = ['completed', 'approved'].includes(latestApp.status);
+
+    // Calculate progress percentage
+    let progress = 0;
+    if (planSelected) progress += 33;
+    if (detailsVerified) progress += 34;
+    if (paymentCompleted) progress += 33;
+
+    return {
+      planSelected,
+      detailsVerified,
+      paymentPending,
+      paymentCompleted,
+      progress
+    };
+  };
+
+  const activationStatus = getActivationStatus();
+
   if (!plan) {
     return (
       <>
@@ -79,24 +123,36 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
             </Paragraph>
 
             <div className="activation-steps">
-              <div className="step-item completed">
-                <CheckCircleOutlined className="step-icon" />
+              <div className={`step-item ${activationStatus.planSelected ? 'completed' : 'pending'}`}>
+                {activationStatus.planSelected ? (
+                  <CheckCircleOutlined className="step-icon" />
+                ) : (
+                  <ClockCircleOutlined className="step-icon" />
+                )}
                 <div className="step-content">
                   <Text strong>{ACTIVATION_STEPS.PLAN_SELECTED.title}</Text>
                   <Text type="secondary">{ACTIVATION_STEPS.PLAN_SELECTED.description}</Text>
                 </div>
               </div>
 
-              <div className="step-item completed">
-                <CheckCircleOutlined className="step-icon" />
+              <div className={`step-item ${activationStatus.detailsVerified ? 'completed' : 'pending'}`}>
+                {activationStatus.detailsVerified ? (
+                  <CheckCircleOutlined className="step-icon" />
+                ) : (
+                  <ClockCircleOutlined className="step-icon" />
+                )}
                 <div className="step-content">
                   <Text strong>{ACTIVATION_STEPS.DETAILS_VERIFIED.title}</Text>
                   <Text type="secondary">{ACTIVATION_STEPS.DETAILS_VERIFIED.description}</Text>
                 </div>
               </div>
 
-              <div className="step-item pending">
-                <ClockCircleOutlined className="step-icon" />
+              <div className={`step-item ${activationStatus.paymentCompleted ? 'completed' : 'pending'}`}>
+                {activationStatus.paymentCompleted ? (
+                  <CheckCircleOutlined className="step-icon" />
+                ) : (
+                  <ClockCircleOutlined className="step-icon" />
+                )}
                 <div className="step-content">
                   <Text strong>{ACTIVATION_STEPS.PAYMENT_PENDING.title}</Text>
                   <Text type="secondary">{ACTIVATION_STEPS.PAYMENT_PENDING.description}</Text>
@@ -107,9 +163,9 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
             <div className="progress-section">
               <Text className="progress-label">{PLAN_MESSAGES.ACTIVATION_PROGRESS_LABEL}</Text>
               <Progress 
-                percent={PROGRESS_CONFIG.PERCENT} 
+                percent={activationStatus.progress} 
                 strokeColor={PROGRESS_CONFIG.STROKE_COLOR}
-                status={PROGRESS_CONFIG.STATUS}
+                status={activationStatus.progress === 100 ? 'success' : PROGRESS_CONFIG.STATUS}
               />
             </div>
 

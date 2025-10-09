@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Alert, Typography, Spin } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { INSURANCE_SELECTION_STEP } from '../../constants/texts';
-import apiService from '../../services/api';
 import styles from './InsuranceSelectionStep.module.css';
 
 const { Title, Text } = Typography;
@@ -10,33 +9,13 @@ const { Title, Text } = Typography;
 const InsuranceSelectionStep = ({ 
   selectedInsurance = null, 
   handleInsuranceSelect = () => {}, 
-  errors = {} 
+  errors = {},
+  insurancePlans = []
 }) => {
   const [expandedPlan, setExpandedPlan] = useState(selectedInsurance);
-  const [insurancePlans, setInsurancePlans] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchInsurancePlans = async () => {
-      try {
-        setLoading(true);
-        const response = await apiService.getInsurancePlans();
-        if (response.success) {
-          setInsurancePlans(response.data);
-        } else {
-          setError('Failed to load insurance plans');
-        }
-      } catch (err) {
-        console.error('Error fetching insurance plans:', err);
-        setError('Failed to load insurance plans');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchInsurancePlans();
-  }, []);
+  
+  const loading = insurancePlans.length === 0;
+  const error = null;
 
   const handlePlanClick = (planId) => {
     // Always select the plan first

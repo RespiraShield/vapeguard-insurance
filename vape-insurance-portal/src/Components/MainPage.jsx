@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import apiService from '../services/api';
 import verificationService from '../services/verificationService';
 import { isFeatureEnabled } from '../config/featureFlags';
@@ -10,6 +10,14 @@ import SuccessStep from "./SuccessStep/SuccessStep";
 import "./styles.css";
 
 const VapeInsurancePortal = () => {
+  // Helper function to check if email is verified (handles both boolean and object formats)
+  const isEmailVerified = (status) => {
+    if (typeof status.email === 'object') {
+      return status.email.verified === true;
+    }
+    return status.email === true;
+  };
+
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -36,11 +44,8 @@ const VapeInsurancePortal = () => {
   const [applicationNumber, setApplicationNumber] = useState(null);
   const [backendConnected, setBackendConnected] = useState(false);
   const [shouldScrollToError, setShouldScrollToError] = useState(false);
-  const [verificationStatus, setVerificationStatus] = useState(() => {
-    // Load verification status from localStorage on component mount
-    const saved = localStorage.getItem('verificationStatus');
-    return saved ? JSON.parse(saved) : { email: false, phone: false };
-  });
+  const [verificationStatus, setVerificationStatus] = useState({ email: false, phone: false });
+  const [savedStep1Data, setSavedStep1Data] = useState(null);
 
   // Check backend connectivity on component mount
   useEffect(() => {
@@ -62,10 +67,13 @@ const VapeInsurancePortal = () => {
   }, []);
 
   const [insurancePlans, setInsurancePlans] = useState([]);
+  const plansFetchedRef = useRef(false);
 
-  // Fetch insurance plans on component mount
   useEffect(() => {
     const fetchInsurancePlans = async () => {
+      if (plansFetchedRef.current) return;
+      plansFetchedRef.current = true;
+      
       try {
         const response = await apiService.getInsurancePlans();
         if (response.success) {
@@ -73,6 +81,7 @@ const VapeInsurancePortal = () => {
         }
       } catch (error) {
         console.error('Error fetching insurance plans:', error);
+        plansFetchedRef.current = false;
       }
     };
 
@@ -122,6 +131,18 @@ const VapeInsurancePortal = () => {
           newErrors.city = "Please select your city from the dropdown";
         } else {
           delete newErrors.city;
+        }
+        break;
+
+      case "phone":
+        if (!value.trim()) {
+          newErrors.phone = "Phone number is required";
+        } else if (value.trim().length !== 10) {
+          newErrors.phone = "Phone number must be exactly 10 digits";
+        } else if (!/^[6-9]\d{9}$/.test(value.trim())) {
+          newErrors.phone = "Phone number must start with 6, 7, 8, or 9";
+        } else {
+          delete newErrors.phone;
         }
         break;
 
@@ -318,17 +339,47 @@ const VapeInsurancePortal = () => {
     loadVerificationStatus();
   }, [applicationId, backendConnected]);
 
-  // Check if email verification status should be reset when email changes
+  // Restore verification status when navigating to step 1
   useEffect(() => {
-    const savedEmail = localStorage.getItem('verifiedEmail');
-    if (savedEmail && savedEmail !== formData.email) {
-      // Email changed, reset verification status
-      const resetStatus = { email: false, phone: false };
-      setVerificationStatus(resetStatus);
-      localStorage.setItem('verificationStatus', JSON.stringify(resetStatus));
-      localStorage.removeItem('verifiedEmail');
+    if (currentStep === 1 && formData.email) {
+      const savedEmail = localStorage.getItem('verifiedEmail');
+      const savedStatus = localStorage.getItem('verificationStatus');
+      
+      if (savedEmail === formData.email && savedStatus) {
+        const parsedStatus = JSON.parse(savedStatus);
+        
+        // Handle both simple boolean format and complex object format from backend
+        const savedEmailVerified = typeof parsedStatus.email === 'object' 
+          ? parsedStatus.email.verified 
+          : parsedStatus.email;
+        
+        const currentEmailVerified = typeof verificationStatus.email === 'object'
+          ? verificationStatus.email.verified
+          : verificationStatus.email;
+        
+        if (savedEmailVerified && !currentEmailVerified) {
+          // Normalize to simple boolean format
+          const normalizedStatus = {
+            email: savedEmailVerified,
+            phone: typeof parsedStatus.phone === 'object' ? parsedStatus.phone.verified : parsedStatus.phone
+          };
+          setVerificationStatus(normalizedStatus);
+          localStorage.setItem('verificationStatus', JSON.stringify(normalizedStatus));
+        }
+      } else if (savedEmail && savedEmail !== formData.email) {
+        const currentEmailVerified = typeof verificationStatus.email === 'object'
+          ? verificationStatus.email.verified
+          : verificationStatus.email;
+          
+        if (currentEmailVerified) {
+          const resetStatus = { email: false, phone: false };
+          setVerificationStatus(resetStatus);
+          localStorage.setItem('verificationStatus', JSON.stringify(resetStatus));
+          localStorage.removeItem('verifiedEmail');
+        }
+      }
     }
-  }, [formData.email]);
+  }, [currentStep, formData.email, verificationStatus.email]);
 
   const validateStep1 = () => {
     const newErrors = {};
@@ -345,14 +396,16 @@ const VapeInsurancePortal = () => {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       newErrors.email = "Please enter a valid email address";
-    } else if (backendConnected && !verificationStatus.email) {
+    } else if (backendConnected && !isEmailVerified(verificationStatus)) {
       newErrors.email = "Please verify your email address";
     }
 
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
+    } else if (formData.phone.trim().length !== 10) {
+      newErrors.phone = "Phone number must be exactly 10 digits";
     } else if (!/^[6-9]\d{9}$/.test(formData.phone.trim())) {
-      newErrors.phone = "Please enter a valid 10-digit Indian mobile number";
+      newErrors.phone = "Phone number must start with 6, 7, 8, or 9";
     }
 
     if (!formData.dateOfBirth) {
@@ -566,29 +619,40 @@ const VapeInsurancePortal = () => {
         }
         
         if (backendConnected) {
-          // Check if email is verified before creating user
-          if (!verificationStatus.email) {
+          if (!isEmailVerified(verificationStatus)) {
             setErrors(prev => ({ ...prev, email: 'Please verify your email before proceeding' }));
             setLoading(false);
             setShouldScrollToError(true);
             return;
           }
 
-          // Submit personal details to backend (creates user after email verification)
-          const response = await apiService.submitPersonalDetails({
+          const currentStep1Data = {
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
-            dateOfBirth: new Date(formData.dateOfBirth).toISOString(),
+            dateOfBirth: formData.dateOfBirth,
             city: formData.city
-          });
-          
-          setApplicationId(response.data.applicationId);
-          setApplicationNumber(response.data.applicationNumber);
-          
-          // Upload bill photo if feature is enabled and file exists
-          if (isFeatureEnabled('BILL_PHOTO_ENABLED') && formData.billPhoto) {
-            await apiService.uploadBillPhoto(response.data.applicationId, formData.billPhoto);
+          };
+
+          const hasChanged = !savedStep1Data || 
+            JSON.stringify(currentStep1Data) !== JSON.stringify(savedStep1Data);
+
+          if (hasChanged) {
+            const response = await apiService.submitPersonalDetails({
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+              dateOfBirth: new Date(formData.dateOfBirth).toISOString(),
+              city: formData.city
+            });
+            
+            setApplicationId(response.data.applicationId);
+            setApplicationNumber(response.data.applicationNumber);
+            setSavedStep1Data(currentStep1Data);
+            
+            if (isFeatureEnabled('BILL_PHOTO_ENABLED') && formData.billPhoto) {
+              await apiService.uploadBillPhoto(response.data.applicationId, formData.billPhoto);
+            }
           }
         }
         setCurrentStep(2);
@@ -725,7 +789,7 @@ const VapeInsurancePortal = () => {
           // Bill photo required only if feature is enabled
           (!isFeatureEnabled('BILL_PHOTO_ENABLED') || formData.billPhoto) &&
           calculateAge(formData.dateOfBirth) > 17 &&
-          verificationStatus.email === true
+          isEmailVerified(verificationStatus)
         );
       case 2:
         return formData.selectedInsurance;
@@ -769,7 +833,7 @@ const VapeInsurancePortal = () => {
             handleCityChange={(city) => setFormData(prev => ({ ...prev, city }))}
             sendEmailOTP={() => handleSendOTP('email')}
             verifyEmailOTP={(otp) => handleVerifyOTP('email', otp)}
-            isEmailVerified={verificationStatus.email === true}
+            isEmailVerified={isEmailVerified(verificationStatus)}
             scrollToError={shouldScrollToError}
             onScrollComplete={() => setShouldScrollToError(false)}
           />
@@ -781,6 +845,7 @@ const VapeInsurancePortal = () => {
             selectedInsurance={formData.selectedInsurance}
             handleInsuranceSelect={handleInsuranceSelect}
             errors={errors}
+            insurancePlans={insurancePlans}
           />
         );
 
