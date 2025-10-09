@@ -1,0 +1,159 @@
+/* Personal Info Styles */
+.personal-info-card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 100px;
+}
+
+.card-header {
+  margin-bottom: 20px;
+}
+
+.card-title {
+  margin: 0 !important;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-icon {
+  color: #667eea;
+}
+
+.user-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  margin: 0 0 4px 0 !important;
+  color: #1f2937;
+}
+
+.user-email {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.personal-descriptions {
+  margin-bottom: 24px;
+}
+
+.personal-descriptions .ant-descriptions-item {
+  margin-bottom: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.personal-descriptions .ant-descriptions-item:last-child {
+  border-bottom: none;
+}
+
+.personal-descriptions .ant-descriptions-item-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.personal-descriptions .ant-descriptions-item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 24px;
+}
+
+.verification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.verification-item span {
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.verification-item .ant-tag {
+  margin: 0;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.account-info {
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.no-user-data {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+}
+
+.no-data-icon {
+  font-size: 48px;
+  color: #d1d5db;
+  margin-bottom: 16px;
+  display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .personal-info-card {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .personal-descriptions .ant-descriptions-item-content {
+    padding-left: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .verification-item {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .user-summary {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+}

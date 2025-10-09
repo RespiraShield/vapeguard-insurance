@@ -35,6 +35,7 @@ const VapeInsurancePortal = () => {
   const [applicationId, setApplicationId] = useState(null);
   const [applicationNumber, setApplicationNumber] = useState(null);
   const [backendConnected, setBackendConnected] = useState(false);
+  const [shouldScrollToError, setShouldScrollToError] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState(() => {
     // Load verification status from localStorage on component mount
     const saved = localStorage.getItem('verificationStatus');
@@ -554,12 +555,22 @@ const VapeInsurancePortal = () => {
     try {
       setLoading(true);
       
-      if (currentStep === 1 && validateStep1()) {
+      if (currentStep === 1) {
+        const isValid = validateStep1();
+        
+        // If validation failed, scroll to first error
+        if (!isValid) {
+          setLoading(false);
+          setShouldScrollToError(true);
+          return;
+        }
+        
         if (backendConnected) {
           // Check if email is verified before creating user
           if (!verificationStatus.email) {
             setErrors(prev => ({ ...prev, email: 'Please verify your email before proceeding' }));
             setLoading(false);
+            setShouldScrollToError(true);
             return;
           }
 
@@ -759,6 +770,8 @@ const VapeInsurancePortal = () => {
             sendEmailOTP={() => handleSendOTP('email')}
             verifyEmailOTP={(otp) => handleVerifyOTP('email', otp)}
             isEmailVerified={verificationStatus.email === true}
+            scrollToError={shouldScrollToError}
+            onScrollComplete={() => setShouldScrollToError(false)}
           />
         );
 
@@ -867,7 +880,7 @@ const VapeInsurancePortal = () => {
                   <button
                     className="button primary"
                     onClick={nextStep}
-                    disabled={!isStepValid() || loading}
+                    disabled={currentStep === 1 ? loading : (!isStepValid() || loading)}
                   >
                     {loading ? 'Saving...' : 'Next Step'}
                   </button>

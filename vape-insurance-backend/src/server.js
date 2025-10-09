@@ -35,13 +35,24 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// CORS configuration
+// CORS configuration - Environment-based
+const isDevelopment = process.env.NODE_ENV === 'development';
+const isProduction = process.env.NODE_ENV === 'production';
+
 const allowedOrigins = [
-  'http://localhost:3000', // Insurance Portal
-  'http://localhost:3001', // Alternative port
-  'http://localhost:3002', // Alternative port
-  'http://localhost:3003', // Dashboard
-  process.env.FRONTEND_URL
+  // Development origins
+  ...(isDevelopment ? [
+    'http://localhost:3000', // Insurance Portal
+    'http://localhost:3001', // Alternative port
+    'http://localhost:3002', // Alternative port
+    'http://localhost:3003', // Dashboard
+  ] : []),
+  
+  // Production origins
+  ...(isProduction ? [
+    process.env.FRONTEND_URL, // Portal production URL
+    process.env.DASHBOARD_URL, // Dashboard production URL
+  ] : []),
 ].filter(Boolean);
 
 app.use(cors({

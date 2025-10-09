@@ -1,0 +1,56 @@
+/* Payment Chart Styles */
+.payment-chart-card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.chart-header {
+  margin-bottom: 20px;
+}
+
+.chart-title {
+  margin: 0 !important;
+  color: #1f2937;
+}
+
+.chart-container {
+  height: 300px;
+}
+
+.no-data {
+  text-align: center;
+  padding: 60px 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 2px dashed #e2e8f0;
+}
+
+.no-data-icon {
+  font-size: 48px;
+  color: #667eea;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.no-data-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.no-data-message {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 250px;
+  }
+}

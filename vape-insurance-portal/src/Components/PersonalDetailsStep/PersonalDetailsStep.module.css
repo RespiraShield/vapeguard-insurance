@@ -65,6 +65,72 @@
   color: #64748b;
   font-weight: 400;
   line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.loginLinkContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.loginLinkContainer:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.loginText {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.loginLink {
+  font-size: 14px;
+  color: #3b82f6;
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.loginLink::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.2s;
+}
+
+.loginLink:hover {
+  color: #2563eb;
+}
+
+.loginLink:hover::after {
+  width: 100%;
+}
+
+@media (max-width: 576px) {
+  .loginLinkContainer {
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+  }
+  
+  .loginText,
+  .loginLink {
+    font-size: 13px;
+  }
 }
 
 .formSection {

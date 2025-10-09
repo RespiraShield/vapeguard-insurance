@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Form, Input, Select, Upload, Button, Row, Col, message, Modal, DatePicker } from 'antd';
 import { MailOutlined, PhoneOutlined, UploadOutlined, CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -20,6 +20,8 @@ const PersonalDetailsStep = ({
   handleCityChange = () => {},
   sendEmailOTP = () => {},
   verifyEmailOTP = () => {},
+  scrollToError = false,
+  onScrollComplete = () => {},
   // sendPhoneOTP = () => {},
   // verifyPhoneOTP = () => {},
   isEmailVerified = false
@@ -31,6 +33,13 @@ const PersonalDetailsStep = ({
   // const [phoneOTPSent, setPhoneOTPSent] = useState(false);
   const [loadingEmailOTP, setLoadingEmailOTP] = useState(false);
   // const [loadingPhoneOTP, setLoadingPhoneOTP] = useState(false);
+
+  // Refs for form fields to enable scrolling to errors
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  const phoneRef = useRef(null);
+  const dobRef = useRef(null);
+  const cityRef = useRef(null);
 
   // Calculate age utility function
   const calculateAge = useCallback((dateOfBirth) => {
@@ -269,12 +278,59 @@ const PersonalDetailsStep = ({
     handleFileChange(null);
   };
 
+  // Scroll to first error when scrollToError prop is true
+  useEffect(() => {
+    if (!scrollToError) return;
+
+    const fieldRefs = {
+      name: nameRef,
+      email: emailRef,
+      phone: phoneRef,
+      dateOfBirth: dobRef,
+      city: cityRef
+    };
+
+    // Find first field with error
+    const firstErrorField = Object.keys(errors).find(field => errors[field] && fieldRefs[field]);
+    
+    if (firstErrorField && fieldRefs[firstErrorField]?.current) {
+      fieldRefs[firstErrorField].current.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center' 
+      });
+      
+      // Try to focus the input
+      const input = fieldRefs[firstErrorField].current.querySelector('input, .ant-select, .ant-picker');
+      if (input) {
+        setTimeout(() => input.focus(), 300);
+      }
+    }
+
+    // Notify parent that scroll is complete
+    onScrollComplete();
+  }, [scrollToError, errors, onScrollComplete]);
+
   return (
     <div className={styles.personalDetailsContainer}>
       <div className={styles.formCard}>
         <div className={styles.stepHeader}>
           <h1 className={styles.stepTitle}>{PERSONAL_DETAILS_STEP.TITLE}</h1>
           <p className={styles.stepSubtitle}>{PERSONAL_DETAILS_STEP.SUBTITLE}</p>
+          
+          {/* Login link for existing users */}
+          <div className={styles.loginLinkContainer}>
+            <span className={styles.loginText}>Already have an account?</span>
+            <a 
+              href={process.env.REACT_APP_DASHBOARD_URL || 'https://dashboard.respirashield.com'} 
+              className={styles.loginLink}
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = process.env.REACT_APP_DASHBOARD_URL || 'https://dashboard.respirashield.com';
+              }}
+            >
+              Login to Dashboard →
+            </a>
+          </div>
         </div>
 
         <Form layout="vertical" size="large">
@@ -286,7 +342,7 @@ const PersonalDetailsStep = ({
             
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={12}>
-                <div className={styles.inputGroup}>
+                <div className={styles.inputGroup} ref={nameRef}>
                   <Form.Item 
                     label={<span className={styles.inputLabel}>{PERSONAL_DETAILS_STEP.FORM.NAME.LABEL.replace(' *', '')}</span>}
                     required
@@ -307,7 +363,7 @@ const PersonalDetailsStep = ({
               </Col>
 
               <Col xs={24} sm={12}>
-                <div className={styles.inputGroup}>
+                <div className={styles.inputGroup} ref={emailRef}>
                   <Form.Item 
                     label={<span className={styles.inputLabel}>{PERSONAL_DETAILS_STEP.FORM.EMAIL.LABEL.replace(' *', '')}</span>}
                     required
@@ -333,7 +389,7 @@ const PersonalDetailsStep = ({
                         <Button 
                           type="primary" 
                           onClick={handleSendEmailOTP}
-                          disabled={!formData.email || !!errors.email || loadingEmailOTP}
+                          disabled={!formData.email || (!!errors.email && !errors.email.includes('verify')) || loadingEmailOTP}
                           className={styles.otpButton}
                           icon={loadingEmailOTP ? <LoadingOutlined /> : null}
                         >
@@ -381,7 +437,7 @@ const PersonalDetailsStep = ({
             
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={12}>
-                <div className={styles.inputGroup}>
+                <div className={styles.inputGroup} ref={phoneRef}>
                   <Form.Item 
                     label={<span className={styles.inputLabel}>{PERSONAL_DETAILS_STEP.FORM.PHONE.LABEL.replace(' *', '')}</span>}
                     required
@@ -444,7 +500,7 @@ const PersonalDetailsStep = ({
               </Col>
 
               <Col xs={24} sm={12}>
-                <div className={styles.inputGroup}>
+                <div className={styles.inputGroup} ref={dobRef}>
                   <Form.Item 
                     label={<span className={styles.inputLabel}>{PERSONAL_DETAILS_STEP.FORM.DOB.LABEL.replace(' *', '')}</span>}
                     required
@@ -483,7 +539,7 @@ const PersonalDetailsStep = ({
             
             <Row gutter={[24, 0]}>
               <Col xs={24} sm={12}>
-                <div className={styles.inputGroup}>
+                <div className={styles.inputGroup} ref={cityRef}>
                   <Form.Item 
                     label={<span className={styles.inputLabel}>{PERSONAL_DETAILS_STEP.FORM.CITY.LABEL.replace(' *', '')}</span>}
                     required

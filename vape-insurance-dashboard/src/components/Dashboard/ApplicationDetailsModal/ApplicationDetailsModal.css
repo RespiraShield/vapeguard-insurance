@@ -1,0 +1,216 @@
+/* Application Details Modal Styles */
+.application-details-modal .ant-modal-content {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.app-modal-header {
+  text-align: center;
+  padding: 16px 20px;
+  background: #f8fafc;
+  margin: -24px -24px 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.app-modal-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 8px;
+  background: #667eea;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+}
+
+.app-modal-icon {
+  font-size: 24px;
+  color: white;
+}
+
+.app-modal-title {
+  margin: 0 !important;
+  font-size: 18px !important;
+  color: #1f2937;
+}
+
+.app-modal-status-tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  margin-top: 8px;
+  border-radius: 6px;
+  border: 1px solid;
+  box-shadow: none;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.app-modal-status-tag .anticon {
+  font-size: 12px;
+}
+
+.app-modal-section {
+  margin-bottom: 16px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.section-icon {
+  font-size: 16px;
+  color: #667eea;
+}
+
+.section-title {
+  font-size: 15px;
+  color: #1f2937;
+}
+
+.app-descriptions .ant-descriptions-item-label {
+  color: #6b7280;
+  font-weight: 500;
+  width: 160px;
+}
+
+.app-descriptions .ant-descriptions-item-content {
+  color: #1f2937;
+}
+
+.app-number {
+  font-family: 'Monaco', 'Menlo', monospace;
+  color: #667eea;
+  font-size: 14px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.timeline-item.completed {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+}
+
+.timeline-item.pending {
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+}
+
+.timeline-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.timeline-item.completed .timeline-icon {
+  color: #10b981;
+}
+
+.timeline-item.pending .timeline-icon {
+  color: #f59e0b;
+}
+
+.timeline-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timeline-content .ant-typography {
+  margin: 0 !important;
+}
+
+.app-modal-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.app-action-button {
+  background: #667eea;
+  border: none;
+}
+
+.app-action-button:hover {
+  background: #5568d3 !important;
+  border: none !important;
+}
+
+.app-close-button {
+  background: #667eea;
+  border: none;
+}
+
+.app-close-button:hover {
+  background: #5568d3 !important;
+  border: none !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .app-modal-header {
+    padding: 16px;
+  }
+
+  .app-modal-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 8px;
+  }
+
+  .app-modal-icon {
+    font-size: 24px;
+  }
+
+  .app-modal-title {
+    font-size: 18px !important;
+  }
+
+  .app-modal-status-tag {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .app-descriptions .ant-descriptions-item-label {
+    width: 120px;
+    font-size: 13px;
+  }
+
+  .app-descriptions .ant-descriptions-item-content {
+    font-size: 13px;
+  }
+
+  .application-details-modal .ant-modal {
+    max-width: 95%;
+    margin: 8px auto;
+  }
+
+  .application-details-modal .ant-modal-content {
+    padding: 16px;
+  }
+
+  .application-details-modal .ant-modal-body {
+    padding: 0;
+  }
+}
