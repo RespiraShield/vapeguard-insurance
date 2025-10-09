@@ -49,3 +49,15 @@ coverage/
 .cache/
 vape-insurance-backend/.env.bak
 vape-insurance-backend/.env.example
+
+# Documentation - exclude generated/documentation markdown files except standard README.md
+ARCHITECTURE.md
+DATABASE_NORMALIZATION.md
+DEPLOYMENT_GUIDE.md
+DEPLOYMENT_STEPS.md
+FEATURE_FLAGS.md
+NORMALIZATION_SUMMARY.md
+PAYMENT_SETUP.md
+BACKEND-GUIDE.md
+CLEANUP_SUMMARY.md
+SECURITY.md
