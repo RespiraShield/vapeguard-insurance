@@ -56,9 +56,8 @@ const SuccessStep = ({ applicationNumber = 'N/A' }) => {
           🎉 Welcome to RespiraShield Insurance! Your journey to better health starts now. 🎉
         </div>
 
-        {/* Login link for existing users */}
         <div className={styles.loginLinkContainer}>
-          <span className={styles.loginText}>Already have an account?</span>
+          <span className={styles.loginText}>Click Here to Login to Dashboard:</span>
           <a 
             href={process.env.REACT_APP_DASHBOARD_URL || 'https://dashboard.respirashield.com'} 
             className={styles.loginLink}
