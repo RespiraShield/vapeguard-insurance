@@ -34,6 +34,18 @@ class ApiService {
       const data = await response.json();
 
       if (!response.ok) {
+        // If 401 Unauthorized, trigger automatic logout
+        if (response.status === 401) {
+          this.clearToken();
+          localStorage.removeItem('vg_user_data');
+          localStorage.removeItem('vg_refresh_token');
+          
+          // Redirect to login after a short delay to allow error display
+          setTimeout(() => {
+            window.location.reload();
+          }, 100);
+        }
+        
         throw new Error(data.error || `HTTP error! status: ${response.status}`);
       }
 
