@@ -71,14 +71,6 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
     );
     const latestApp = sortedApps[0];
 
-    console.log('[DEBUG] Latest application:', {
-      status: latestApp.status,
-      insurancePlanId: latestApp.insurancePlanId,
-      insurancePlan: latestApp.insurancePlan,
-      payment: latestApp.payment,
-      fullApp: latestApp
-    });
-
     // Step 1: Plan Selected - has insurancePlanId/insurancePlan
     const planSelected = !!(latestApp.insurancePlanId || latestApp.insurancePlan);
     
@@ -96,14 +88,6 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
     if (planSelected) progress += 33;
     if (detailsVerified) progress += 34;
     if (paymentCompleted) progress += 33;
-
-    console.log('[DEBUG] Activation status:', {
-      planSelected,
-      detailsVerified,
-      paymentPending,
-      paymentCompleted,
-      progress
-    });
 
     return {
       planSelected,
