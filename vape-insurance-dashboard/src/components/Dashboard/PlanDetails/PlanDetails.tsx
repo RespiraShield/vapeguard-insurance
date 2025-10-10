@@ -60,6 +60,7 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
         planSelected: false,
         detailsVerified: false,
         paymentPending: false,
+        paymentCompleted: false,
         progress: 0
       };
     }
@@ -70,15 +71,17 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
     );
     const latestApp = sortedApps[0];
 
-    // Check if plan is selected (has insurancePlanId)
-    const planSelected = !!latestApp.insurancePlanId || !!latestApp.insurancePlan;
+    // Step 1: Plan Selected - has insurancePlanId/insurancePlan
+    const planSelected = !!(latestApp.insurancePlanId || latestApp.insurancePlan);
     
-    // Check if details are verified (status is submitted or beyond)
-    const detailsVerified = ['submitted', 'under_review', 'approved', 'payment_pending', 'completed'].includes(latestApp.status);
+    // Step 2: Details Verified - personal information submitted AND plan selected
+    // This happens when status moves beyond 'draft' to any of these states
+    const detailsVerified = ['submitted', 'under_review', 'approved', 'payment_pending', 'completed', 'enrolled'].includes(latestApp.status);
     
-    // Check payment status
+    // Step 3: Payment Completed - ONLY if payment was actually made (status is 'completed' or 'approved')
+    // 'enrolled' status means user enrolled WITHOUT payment (Pay Later option), so payment is NOT completed
     const paymentPending = latestApp.status === 'payment_pending';
-    const paymentCompleted = ['completed', 'approved'].includes(latestApp.status);
+    const paymentCompleted = latestApp.status === 'completed' || latestApp.status === 'approved';
 
     // Calculate progress percentage
     let progress = 0;
@@ -142,8 +145,16 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
                   <ClockCircleOutlined className="step-icon" />
                 )}
                 <div className="step-content">
-                  <Text strong>{ACTIVATION_STEPS.DETAILS_VERIFIED.title}</Text>
-                  <Text type="secondary">{ACTIVATION_STEPS.DETAILS_VERIFIED.description}</Text>
+                  <Text strong>
+                    {activationStatus.detailsVerified 
+                      ? ACTIVATION_STEPS.DETAILS_VERIFIED.completed.title 
+                      : ACTIVATION_STEPS.DETAILS_VERIFIED.pending.title}
+                  </Text>
+                  <Text type="secondary">
+                    {activationStatus.detailsVerified 
+                      ? ACTIVATION_STEPS.DETAILS_VERIFIED.completed.description 
+                      : ACTIVATION_STEPS.DETAILS_VERIFIED.pending.description}
+                  </Text>
                 </div>
               </div>
 
@@ -154,8 +165,16 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
                   <ClockCircleOutlined className="step-icon" />
                 )}
                 <div className="step-content">
-                  <Text strong>{ACTIVATION_STEPS.PAYMENT_PENDING.title}</Text>
-                  <Text type="secondary">{ACTIVATION_STEPS.PAYMENT_PENDING.description}</Text>
+                  <Text strong>
+                    {activationStatus.paymentCompleted 
+                      ? ACTIVATION_STEPS.PAYMENT.completed.title 
+                      : ACTIVATION_STEPS.PAYMENT.pending.title}
+                  </Text>
+                  <Text type="secondary">
+                    {activationStatus.paymentCompleted 
+                      ? ACTIVATION_STEPS.PAYMENT.completed.description 
+                      : ACTIVATION_STEPS.PAYMENT.pending.description}
+                  </Text>
                 </div>
               </div>
             </div>

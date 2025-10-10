@@ -12,12 +12,24 @@ export const ACTIVATION_STEPS = {
     description: 'You\'ve chosen your insurance plan',
   },
   DETAILS_VERIFIED: {
-    title: 'Details Verified',
-    description: 'Your information is confirmed',
+    completed: {
+      title: 'Details Verified',
+      description: 'Your information is confirmed',
+    },
+    pending: {
+      title: 'Details Pending',
+      description: 'Awaiting information verification',
+    },
   },
-  PAYMENT_PENDING: {
-    title: 'Payment Pending',
-    description: 'Complete payment to activate',
+  PAYMENT: {
+    completed: {
+      title: 'Payment Completed',
+      description: 'Your plan is now active',
+    },
+    pending: {
+      title: 'Payment Pending',
+      description: 'Complete payment to activate',
+    },
   },
 } as const;
 
