@@ -41,7 +41,7 @@ export default function Coverage() {
             Proposed Coverage Areas
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Here's what we're planning to offer. Help us refine these benefits by registering your interest.
+            Here&apos;s what we&apos;re planning to offer. Help us refine these benefits by registering your interest.
           </p>
         </motion.div>
 

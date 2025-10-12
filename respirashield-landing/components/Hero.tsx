@@ -64,7 +64,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            We're conducting market research to understand demand for specialized vape user insurance. 
+            We&apos;re conducting market research to understand demand for specialized vape user insurance. 
             Register your interest to help bring this coverage to life.
           </motion.p>
 
