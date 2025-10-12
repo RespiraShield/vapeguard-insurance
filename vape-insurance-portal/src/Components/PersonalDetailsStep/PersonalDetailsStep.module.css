@@ -469,6 +469,29 @@
   margin-right: 4px;
 }
 
+.helpText {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.helperText {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+  display: block;
+}
+
+.lockedBadge {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
 .filePreview {
   display: flex;
   align-items: center;
@@ -512,6 +535,263 @@
   }
 }
 
+/* Vaping Information Card Styles - Professional Theme */
+.vapingInfoCard {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 28px;
+  margin-top: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.vapingInfoCard::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.vapingInfoCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.vapingInfoHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.vapingInfoIcon {
+  font-size: 40px;
+  line-height: 1;
+  animation: smokeFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+@keyframes smokeFloat {
+  0%, 100% { 
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: translateY(-8px) scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+.vapingInfoTextContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.vapingInfoTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -0.3px;
+}
+
+.vapingInfoSubtitle {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.vapingFrequencyContainer {
+  position: relative;
+}
+
+/* Frequency Input Section */
+.frequencyInputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.frequencyLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.numberInputContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.numberInputContainer:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+  transform: scale(1.01);
+}
+
+.frequencyNumberInput {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  text-align: center !important;
+  width: 80px !important;
+  padding: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.frequencyNumberInput:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.frequencyNumberInput::placeholder {
+  color: #94a3b8 !important;
+  opacity: 0.5 !important;
+}
+
+.timesText {
+  font-size: 16px;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.inputError {
+  border-color: #dc2626 !important;
+}
+
+/* Cadence Pills Section */
+.cadenceSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cadencePillsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.cadencePill {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.cadencePill::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+}
+
+.cadencePill:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.cadencePill:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.cadencePill:active {
+  transform: translateY(-1px);
+}
+
+.cadencePillActive {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border-color: #2563eb;
+  color: white;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+  transform: scale(1.03);
+}
+
+.cadencePillActive::after {
+  content: '✓';
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Ensure select matches input height */
+.citySelect .ant-select-selector {
+  border-radius: 8px !important;
+  border: 2px solid #e5e7eb !important;
+  padding: 12px 16px !important;
+  height: 50px !important;
+  min-height: 50px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.citySelect .ant-select-selection-search {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.citySelect .ant-select-selection-item {
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+}
+
+.citySelect .ant-select-selection-placeholder {
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+}
+
 @media (max-width: 768px) {
   .personalDetailsContainer {
     padding: 16px;
@@ -533,5 +813,39 @@
   
   .otpButton {
     width: 100%;
+  }
+  
+  .vapingInfoCard {
+    padding: 20px;
+  }
+  
+  .vapingInfoIcon {
+    font-size: 32px;
+  }
+  
+  .vapingInfoTitle {
+    font-size: 16px;
+  }
+  
+  .vapingInfoSubtitle {
+    font-size: 13px;
+  }
+  
+  .frequencyNumberInput {
+    font-size: 24px !important;
+    width: 70px !important;
+  }
+  
+  .timesText {
+    font-size: 14px;
+  }
+  
+  .cadencePillsContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .cadencePill {
+    padding: 12px 16px;
+    font-size: 14px;
   }
 }

@@ -153,6 +153,20 @@ export const PERSONAL_DETAILS_STEP = {
       HINT: 'Support for a single upload. Only image files (JPEG, PNG, GIF) up to 10MB.',
       UPLOAD_TEXT: 'Click or drag file to this area to upload',
       UPLOAD_HINT: 'Support for a single upload. Only image files (JPEG, PNG, GIF) up to 10MB.'
+    },
+    VAPING_FREQUENCY: {
+      LABEL: 'Vaping Frequency *',
+      VALUE_LABEL: 'Number of times *',
+      VALUE_PLACEHOLDER: 'Enter value (1-999)',
+      CADENCE_LABEL: 'Cadence *',
+      CADENCE_PLACEHOLDER: 'Select frequency',
+      CADENCE_OPTIONS: [
+        { value: 'per_day', label: 'Daily' },
+        { value: 'per_week', label: 'Weekly' },
+        { value: 'per_month', label: 'Monthly' },
+        { value: 'per_year', label: 'Yearly' }
+      ],
+      HELP_TEXT: 'Help us recommend the right coverage for you'
     }
   },
   FIELDS: {

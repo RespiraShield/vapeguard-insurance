@@ -61,3 +61,8 @@ PAYMENT_SETUP.md
 BACKEND-GUIDE.md
 CLEANUP_SUMMARY.md
 SECURITY.md
+
+# Migration scripts - Sensitive database operations
+vape-insurance-backend/src/scripts/*-migration.js
+vape-insurance-backend/src/scripts/mongodb-atlas-update.js
+vape-insurance-backend/src/scripts/add-vaping-frequency-migration.js
