@@ -11,8 +11,12 @@ describe('Application Validators', () => {
     test('should validate correct personal details', () => {
       const validData = {
         name: 'John Doe',
-        dob: '1990-01-01',
-        city: 'mumbai'
+        email: 'john@example.com',
+        phone: '9876543210',
+        dateOfBirth: '1990-01-01',
+        city: 'Mumbai',
+        vapingFrequencyValue: 5,
+        vapingFrequencyCadence: 'per_day'
       };
 
       const { error } = personalDetailsSchema.validate(validData);
@@ -103,13 +107,127 @@ describe('Application Validators', () => {
     test('should reject empty city', () => {
       const invalidData = {
         name: 'John Doe',
-        dob: '1990-01-01',
-        city: ''
+        email: 'john@example.com',
+        phone: '9876543210',
+        dateOfBirth: '1990-01-01',
+        city: '',
+        vapingFrequencyValue: 5,
+        vapingFrequencyCadence: 'per_day'
       };
 
       const { error } = personalDetailsSchema.validate(invalidData);
       expect(error).toBeDefined();
       expect(error.details[0].message).toContain('Please select your city from the dropdown');
+    });
+
+    test('should validate vaping frequency value', () => {
+      const validData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '9876543210',
+        dateOfBirth: '1990-01-01',
+        city: 'Mumbai',
+        vapingFrequencyValue: 999,
+        vapingFrequencyCadence: 'per_year'
+      };
+
+      const { error } = personalDetailsSchema.validate(validData);
+      expect(error).toBeUndefined();
+    });
+
+    test('should reject vaping frequency value below 1', () => {
+      const invalidData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '9876543210',
+        dateOfBirth: '1990-01-01',
+        city: 'Mumbai',
+        vapingFrequencyValue: 0,
+        vapingFrequencyCadence: 'per_day'
+      };
+
+      const { error } = personalDetailsSchema.validate(invalidData);
+      expect(error).toBeDefined();
+      expect(error.details[0].message).toContain('Vaping frequency must be at least 1');
+    });
+
+    test('should reject vaping frequency value above 999', () => {
+      const invalidData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '9876543210',
+        dateOfBirth: '1990-01-01',
+        city: 'Mumbai',
+        vapingFrequencyValue: 1000,
+        vapingFrequencyCadence: 'per_day'
+      };
+
+      const { error } = personalDetailsSchema.validate(invalidData);
+      expect(error).toBeDefined();
+      expect(error.details[0].message).toContain('Vaping frequency cannot exceed 999');
+    });
+
+    test('should reject missing vaping frequency value', () => {
+      const invalidData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '9876543210',
+        dateOfBirth: '1990-01-01',
+        city: 'Mumbai',
+        vapingFrequencyCadence: 'per_day'
+      };
+
+      const { error } = personalDetailsSchema.validate(invalidData);
+      expect(error).toBeDefined();
+      expect(error.details[0].message).toContain('Vaping frequency value is required');
+    });
+
+    test('should reject invalid vaping frequency cadence', () => {
+      const invalidData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '9876543210',
+        dateOfBirth: '1990-01-01',
+        city: 'Mumbai',
+        vapingFrequencyValue: 5,
+        vapingFrequencyCadence: 'per_hour'
+      };
+
+      const { error } = personalDetailsSchema.validate(invalidData);
+      expect(error).toBeDefined();
+      expect(error.details[0].message).toContain('Cadence must be one of: per_day, per_week, per_month, per_year');
+    });
+
+    test('should reject missing vaping frequency cadence', () => {
+      const invalidData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '9876543210',
+        dateOfBirth: '1990-01-01',
+        city: 'Mumbai',
+        vapingFrequencyValue: 5
+      };
+
+      const { error } = personalDetailsSchema.validate(invalidData);
+      expect(error).toBeDefined();
+      expect(error.details[0].message).toContain('Vaping frequency cadence is required');
+    });
+
+    test('should accept all valid cadence values', () => {
+      const cadences = ['per_day', 'per_week', 'per_month', 'per_year'];
+      cadences.forEach(cadence => {
+        const validData = {
+          name: 'John Doe',
+          email: 'john@example.com',
+          phone: '9876543210',
+          dateOfBirth: '1990-01-01',
+          city: 'Mumbai',
+          vapingFrequencyValue: 5,
+          vapingFrequencyCadence: cadence
+        };
+        const { error } = personalDetailsSchema.validate(validData);
+        expect(error).toBeUndefined();
+      });
     });
   });
 

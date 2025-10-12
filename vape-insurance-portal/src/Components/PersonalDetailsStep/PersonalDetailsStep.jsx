@@ -24,8 +24,10 @@ const PersonalDetailsStep = ({
   onScrollComplete = () => {},
   // sendPhoneOTP = () => {},
   // verifyPhoneOTP = () => {},
-  isEmailVerified = false
+  isEmailVerified = false,
   // isPhoneVerified = false
+  maxVapingFrequency = 999,
+  isEmailLocked = false
 }) => {
   const [emailOTP, setEmailOTP] = useState('');
   const [emailOTPSent, setEmailOTPSent] = useState(false);
@@ -37,6 +39,7 @@ const PersonalDetailsStep = ({
   const phoneRef = useRef(null);
   const dobRef = useRef(null);
   const cityRef = useRef(null);
+  const vapingFrequencyRef = useRef(null);
 
   // Calculate age utility function
   const calculateAge = useCallback((dateOfBirth) => {
@@ -284,7 +287,9 @@ const PersonalDetailsStep = ({
       email: emailRef,
       phone: phoneRef,
       dateOfBirth: dobRef,
-      city: cityRef
+      city: cityRef,
+      vapingFrequencyValue: vapingFrequencyRef,
+      vapingFrequencyCadence: vapingFrequencyRef
     };
 
     // Find first field with error
@@ -362,10 +367,21 @@ const PersonalDetailsStep = ({
               <Col xs={24} sm={12}>
                 <div className={styles.inputGroup} ref={emailRef}>
                   <Form.Item 
-                    label={<span className={styles.inputLabel}>{PERSONAL_DETAILS_STEP.FORM.EMAIL.LABEL.replace(' *', '')}</span>}
+                    label={
+                      <span className={styles.inputLabel}>
+                        {PERSONAL_DETAILS_STEP.FORM.EMAIL.LABEL.replace(' *', '')}
+                        {isEmailLocked && <span className={styles.lockedBadge}> 🔒 Locked</span>}
+                      </span>
+                    }
                     required
                     validateStatus={errors.email ? 'error' : ''}
-                    help={errors.email && <span className={styles.errorMessage}>{errors.email}</span>}
+                    help={
+                      isEmailLocked ? (
+                        <span className={styles.helperText}>Email cannot be changed for security reasons</span>
+                      ) : (
+                        errors.email && <span className={styles.errorMessage}>{errors.email}</span>
+                      )
+                    }
                   >
                     <div className={styles.otpSection}>
                       <div className={styles.otpInput}>
@@ -379,10 +395,11 @@ const PersonalDetailsStep = ({
                             placeholder={PERSONAL_DETAILS_STEP.FORM.EMAIL.PLACEHOLDER}
                             className={styles.styledInput}
                             size="large"
+                            disabled={isEmailLocked}
                           />
                         </div>
                       </div>
-                      {!isEmailVerified && (
+                      {!isEmailVerified && !isEmailLocked && (
                         <Button 
                           type="primary" 
                           onClick={handleSendEmailOTP}
@@ -424,6 +441,7 @@ const PersonalDetailsStep = ({
                 </div>
               </Col>
             </Row>
+
           </div>
 
           <div className={styles.formSection}>
@@ -537,6 +555,85 @@ const PersonalDetailsStep = ({
           <div className={styles.formSection}>
             <div className={styles.sectionTitle}>
               <div className={styles.sectionIcon}>3</div>
+              Vaping Information
+            </div>
+            
+            <div className={styles.vapingInfoCard}>
+              <div className={styles.vapingInfoHeader}>
+                <span className={styles.vapingInfoIcon}>💨</span>
+                <div className={styles.vapingInfoTextContainer}>
+                  <span className={styles.vapingInfoTitle}>How often do you vape?</span>
+                  <span className={styles.vapingInfoSubtitle}>Help us recommend the perfect coverage for you</span>
+                </div>
+              </div>
+              
+              <div className={styles.vapingFrequencyContainer} ref={vapingFrequencyRef}>
+                <Row gutter={[24, 0]}>
+                  {/* Number Input */}
+                  <Col xs={24} sm={12}>
+                    <div className={styles.frequencyInputWrapper}>
+                      <label className={styles.frequencyLabel}>I vape</label>
+                      <div className={styles.numberInputContainer}>
+                        <Input
+                          type="number"
+                          name="vapingFrequencyValue"
+                          value={formData.vapingFrequencyValue || ''}
+                          onChange={handleInputChange}
+                          onBlur={handleBlur}
+                          placeholder="0"
+                          className={styles.frequencyNumberInput}
+                          size="large"
+                          min={1}
+                          max={maxVapingFrequency}
+                          status={errors.vapingFrequencyValue ? 'error' : ''}
+                        />
+                        <span className={styles.timesText}>times</span>
+                      </div>
+                      {formData.vapingFrequencyCadence && !errors.vapingFrequencyValue && (
+                        <span className={styles.helperText}>Max: {maxVapingFrequency}</span>
+                      )}
+                      {errors.vapingFrequencyValue && (
+                        <span className={styles.errorMessage}>{errors.vapingFrequencyValue}</span>
+                      )}
+                    </div>
+                  </Col>
+
+                  {/* Cadence Selection Pills */}
+                  <Col xs={24} sm={12}>
+                    <div className={styles.cadenceSection}>
+                      <label className={styles.frequencyLabel}>Per</label>
+                      <div className={styles.cadencePillsContainer}>
+                        {PERSONAL_DETAILS_STEP.FORM.VAPING_FREQUENCY.CADENCE_OPTIONS.map(option => (
+                          <button
+                            key={option.value}
+                            type="button"
+                            className={`${styles.cadencePill} ${
+                              formData.vapingFrequencyCadence === option.value ? styles.cadencePillActive : ''
+                            }`}
+                            onClick={() => {
+                              handleInputChange({ target: { name: 'vapingFrequencyCadence', value: option.value } });
+                              if (errors.vapingFrequencyCadence) {
+                                setErrors(prev => ({ ...prev, vapingFrequencyCadence: undefined }));
+                              }
+                            }}
+                          >
+                            {option.label}
+                          </button>
+                        ))}
+                      </div>
+                      {errors.vapingFrequencyCadence && (
+                        <span className={styles.errorMessage}>{errors.vapingFrequencyCadence}</span>
+                      )}
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.formSection}>
+            <div className={styles.sectionTitle}>
+              <div className={styles.sectionIcon}>4</div>
               Location
             </div>
             

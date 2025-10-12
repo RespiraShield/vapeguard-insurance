@@ -103,3 +103,8 @@ Thumbs.db
 # Build directories
 build/
 dist/
+
+# Migration scripts - Sensitive database operations
+src/scripts/*-migration.js
+src/scripts/mongodb-atlas-update.js
+src/scripts/add-vaping-frequency-migration.js

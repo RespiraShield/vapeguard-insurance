@@ -59,6 +59,50 @@ const personalDetailsSchema = Joi.object({
     .messages({
       'string.empty': 'Please select your city from the dropdown',
       'any.required': 'City is required'
+    }),
+  
+  vapingFrequencyCadence: Joi.string()
+    .valid('per_day', 'per_week', 'per_month', 'per_year')
+    .required()
+    .messages({
+      'any.only': 'Cadence must be one of: per_day, per_week, per_month, per_year',
+      'any.required': 'Vaping frequency cadence is required'
+    }),
+  
+  vapingFrequencyValue: Joi.number()
+    .integer()
+    .min(1)
+    .max(Joi.ref('$maxLimit'))
+    .required()
+    .when('vapingFrequencyCadence', {
+      is: 'per_day',
+      then: Joi.number().max(30).messages({
+        'number.max': 'Maximum 30 times per day'
+      })
+    })
+    .when('vapingFrequencyCadence', {
+      is: 'per_week',
+      then: Joi.number().max(200).messages({
+        'number.max': 'Maximum 200 times per week'
+      })
+    })
+    .when('vapingFrequencyCadence', {
+      is: 'per_month',
+      then: Joi.number().max(900).messages({
+        'number.max': 'Maximum 900 times per month'
+      })
+    })
+    .when('vapingFrequencyCadence', {
+      is: 'per_year',
+      then: Joi.number().max(10000).messages({
+        'number.max': 'Maximum 10000 times per year'
+      })
+    })
+    .messages({
+      'number.base': 'Vaping frequency value must be a number',
+      'number.min': 'Vaping frequency must be at least 1',
+      'number.max': 'Vaping frequency value exceeds maximum allowed',
+      'any.required': 'Vaping frequency value is required'
     })
 });
 

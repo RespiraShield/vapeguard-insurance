@@ -115,13 +115,41 @@ class ApiService {
         email: personalData.email,
         phone: personalData.phone,
         dateOfBirth: personalData.dateOfBirth,
-        city: personalData.city
+        city: personalData.city,
+        vapingFrequencyValue: personalData.vapingFrequencyValue,
+        vapingFrequencyCadence: personalData.vapingFrequencyCadence
       }),
     });
 
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.error || 'Failed to submit personal details');
+    }
+
+    return response.json();
+  }
+
+  // Update Personal Details API (email cannot be changed)
+  async updatePersonalDetails(applicationId, personalData) {
+    const response = await fetch(`${API_BASE_URL}/application/${applicationId}/personal-details`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: personalData.name,
+        // email is intentionally excluded - cannot be changed after creation
+        phone: personalData.phone,
+        dateOfBirth: personalData.dateOfBirth,
+        city: personalData.city,
+        vapingFrequencyValue: personalData.vapingFrequencyValue,
+        vapingFrequencyCadence: personalData.vapingFrequencyCadence
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to update personal details');
     }
 
     return response.json();
@@ -236,6 +264,7 @@ export default apiService;
 // Export individual methods for easier importing
 export const {
   submitPersonalDetails,
+  updatePersonalDetails,
   uploadBillPhoto,
   selectInsurance,
   getInsurancePlans,

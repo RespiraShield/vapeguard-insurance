@@ -46,6 +46,7 @@ router.post('/application/check-email', preVerificationHandler.checkEmailExists)
 
 // Application Routes
 router.post('/application/personal-details', applicationHandler.createPersonalDetails);
+router.put('/application/:applicationId/personal-details', applicationHandler.updatePersonalDetails);
 router.put('/application/:applicationId/insurance', applicationHandler.selectInsurance);
 router.post('/application/:applicationId/upload-bill', upload.single('billPhoto'), applicationHandler.uploadBillPhoto);
 router.get('/application/:applicationId', applicationHandler.getApplication);

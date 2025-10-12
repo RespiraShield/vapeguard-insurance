@@ -9,7 +9,7 @@ class ApplicationHandler {
   // Create or update user and create draft application
   async createPersonalDetails(req, res) {
     try {
-      const { name, email, phone, dateOfBirth, city } = req.body;
+      const { name, email, phone, dateOfBirth, city, vapingFrequencyValue, vapingFrequencyCadence } = req.body;
 
       // Check if email is verified first (MongoDB-based)
       const PreVerification = require('../models/PreVerification');
@@ -42,6 +42,8 @@ class ApplicationHandler {
           phone,
           dateOfBirth: new Date(dateOfBirth),
           city,
+          vapingFrequencyValue,
+          vapingFrequencyCadence,
           emailVerified: true,
           emailVerifiedAt: new Date(),
           metadata: {
@@ -55,6 +57,8 @@ class ApplicationHandler {
         user.name = name;
         user.city = city;
         user.dateOfBirth = new Date(dateOfBirth);
+        user.vapingFrequencyValue = vapingFrequencyValue;
+        user.vapingFrequencyCadence = vapingFrequencyCadence;
         if (!user.emailVerified) {
           user.emailVerified = true;
           user.emailVerifiedAt = new Date();
@@ -83,6 +87,72 @@ class ApplicationHandler {
           applicationNumber: application.applicationNumber,
           userId: user._id
         }
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        error: error.message
+      });
+    }
+  }
+
+  // Update personal details for existing application
+  async updatePersonalDetails(req, res) {
+    try {
+      const { applicationId } = req.params;
+      const { name, phone, dateOfBirth, city, vapingFrequencyValue, vapingFrequencyCadence } = req.body;
+
+      // Find the application
+      const application = await Application.findById(applicationId);
+      if (!application) {
+        return res.status(404).json({
+          success: false,
+          error: 'Application not found'
+        });
+      }
+
+      // Only allow updates for draft applications
+      if (application.status !== 'draft') {
+        return res.status(400).json({
+          success: false,
+          error: 'Cannot update submitted applications'
+        });
+      }
+
+      // Update user details (email cannot be changed for security)
+      const user = await User.findById(application.userId);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          error: 'User not found'
+        });
+      }
+
+      user.name = name;
+      user.phone = phone;
+      user.dateOfBirth = new Date(dateOfBirth);
+      user.city = city;
+      user.vapingFrequencyValue = vapingFrequencyValue;
+      user.vapingFrequencyCadence = vapingFrequencyCadence;
+      await user.save();
+
+      // Update application metadata
+      application.metadata = {
+        ...application.metadata,
+        lastUpdatedAt: new Date(),
+        ipAddress: req.ip,
+        userAgent: req.get('User-Agent')
+      };
+      await application.save();
+
+      res.status(200).json({
+        success: true,
+        data: {
+          applicationId: application._id,
+          applicationNumber: application.applicationNumber,
+          userId: user._id
+        },
+        message: 'Personal details updated successfully'
       });
     } catch (error) {
       res.status(400).json({

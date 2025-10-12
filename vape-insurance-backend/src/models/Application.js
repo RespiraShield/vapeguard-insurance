@@ -159,15 +159,8 @@ applicationSchema.methods.canSubmit = async function() {
   const user = await User.findById(this.userId);
   
   if (!user) {
-    console.log('canSubmit check: User not found');
     return false;
   }
-  
-  console.log('canSubmit check:', {
-    applicationId: this._id,
-    emailVerified: user.emailVerified,
-    billPhotoEnabled: isFeatureEnabled('BILL_PHOTO_ENABLED')
-  });
   
   // Email verification is always required
   if (!user.emailVerified) {

@@ -26,6 +26,8 @@ const VapeInsurancePortal = () => {
     dateOfBirth: "",
     city: "",
     billPhoto: null,
+    vapingFrequencyValue: "",
+    vapingFrequencyCadence: "",
     selectedInsurance: null,
     paymentMethod: "",
     // Payment details
@@ -88,8 +90,31 @@ const VapeInsurancePortal = () => {
     fetchInsurancePlans();
   }, []);
 
+  // Get dynamic max value based on cadence
+  const getMaxVapingFrequency = (cadence) => {
+    const limits = {
+      per_day: 30,      // Max 30 times per day
+      per_week: 200,    // Max ~28 times per day
+      per_month: 900,   // Max 30 times per day
+      per_year: 10000   // Max ~27 times per day
+    };
+    return limits[cadence] || 999;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // Apply smart limits for vaping frequency value
+    if (name === 'vapingFrequencyValue') {
+      const numValue = parseInt(value);
+      const maxLimit = getMaxVapingFrequency(formData.vapingFrequencyCadence);
+      
+      // Prevent entering values beyond the limit
+      if (value && (!isNaN(numValue) && numValue > maxLimit)) {
+        return; // Don't update if exceeds limit
+      }
+    }
+    
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -143,6 +168,37 @@ const VapeInsurancePortal = () => {
           newErrors.phone = "Phone number must start with 6, 7, 8, or 9";
         } else {
           delete newErrors.phone;
+        }
+        break;
+
+      case "vapingFrequencyValue":
+        if (!value.trim()) {
+          newErrors.vapingFrequencyValue = "Vaping frequency value is required";
+        } else {
+          const numValue = parseInt(value.trim());
+          const maxLimit = getMaxVapingFrequency(formData.vapingFrequencyCadence);
+          
+          if (isNaN(numValue) || numValue < 1) {
+            newErrors.vapingFrequencyValue = "Please enter a valid number (minimum 1)";
+          } else if (numValue > maxLimit) {
+            const cadenceLabel = {
+              per_day: 'per day',
+              per_week: 'per week',
+              per_month: 'per month',
+              per_year: 'per year'
+            }[formData.vapingFrequencyCadence] || '';
+            newErrors.vapingFrequencyValue = `Maximum ${maxLimit} times ${cadenceLabel}`;
+          } else {
+            delete newErrors.vapingFrequencyValue;
+          }
+        }
+        break;
+
+      case "vapingFrequencyCadence":
+        if (!value) {
+          newErrors.vapingFrequencyCadence = "Please select a frequency cadence";
+        } else {
+          delete newErrors.vapingFrequencyCadence;
         }
         break;
 
@@ -257,6 +313,53 @@ const VapeInsurancePortal = () => {
     }
 
     return age;
+  };
+
+  // Recommend insurance plan based on vaping frequency
+  const recommendPlanBasedOnFrequency = (value, cadence) => {
+    if (!value || !cadence || insurancePlans.length === 0) return null;
+    
+    const numValue = parseInt(value);
+    if (isNaN(numValue)) return null;
+    
+    // Convert to annual frequency for comparison
+    let annualFrequency = numValue;
+    switch (cadence) {
+      case 'per_day':
+        annualFrequency = numValue * 365;
+        break;
+      case 'per_week':
+        annualFrequency = numValue * 52;
+        break;
+      case 'per_month':
+        annualFrequency = numValue * 12;
+        break;
+      case 'per_year':
+        annualFrequency = numValue;
+        break;
+      default:
+        break;
+    }
+    
+    // Sort plans by price (assuming higher price = more comprehensive)
+    const sortedPlans = [...insurancePlans].sort((a, b) => a.price - b.price);
+    
+    // Recommend based on frequency thresholds
+    if (annualFrequency >= 1825) { // 5+ times per day
+      // Highest tier plan
+      return sortedPlans[sortedPlans.length - 1]?._id;
+    } else if (annualFrequency >= 730) { // 2-4 times per day
+      // Mid-high tier plan
+      const midHighIndex = Math.floor(sortedPlans.length * 0.75);
+      return sortedPlans[midHighIndex]?._id;
+    } else if (annualFrequency >= 365) { // Once per day
+      // Mid tier plan
+      const midIndex = Math.floor(sortedPlans.length / 2);
+      return sortedPlans[midIndex]?._id;
+    } else {
+      // Basic plan for lighter usage
+      return sortedPlans[0]?._id;
+    }
   };
 
   // OTP Verification Functions
@@ -429,6 +532,30 @@ const VapeInsurancePortal = () => {
 
     if (!formData.city) {
       newErrors.city = "Please select your city from the dropdown";
+    }
+
+    // Vaping frequency validation
+    if (!formData.vapingFrequencyValue || !formData.vapingFrequencyValue.toString().trim()) {
+      newErrors.vapingFrequencyValue = "Vaping frequency value is required";
+    } else {
+      const numValue = parseInt(formData.vapingFrequencyValue.toString().trim());
+      const maxLimit = getMaxVapingFrequency(formData.vapingFrequencyCadence);
+      
+      if (isNaN(numValue) || numValue < 1) {
+        newErrors.vapingFrequencyValue = "Please enter a valid number (minimum 1)";
+      } else if (numValue > maxLimit) {
+        const cadenceLabel = {
+          per_day: 'per day',
+          per_week: 'per week',
+          per_month: 'per month',
+          per_year: 'per year'
+        }[formData.vapingFrequencyCadence] || '';
+        newErrors.vapingFrequencyValue = `Maximum ${maxLimit} times ${cadenceLabel}`;
+      }
+    }
+
+    if (!formData.vapingFrequencyCadence) {
+      newErrors.vapingFrequencyCadence = "Please select a frequency cadence";
     }
 
     // Bill photo validation - controlled by feature flag
@@ -626,35 +753,72 @@ const VapeInsurancePortal = () => {
             return;
           }
 
-          const currentStep1Data = {
+          // Prepare data for comparison and API call
+          const currentFormData = {
             name: formData.name,
             email: formData.email,
             phone: formData.phone,
             dateOfBirth: formData.dateOfBirth,
-            city: formData.city
+            city: formData.city,
+            vapingFrequencyValue: formData.vapingFrequencyValue,
+            vapingFrequencyCadence: formData.vapingFrequencyCadence
           };
 
-          const hasChanged = !savedStep1Data || 
-            JSON.stringify(currentStep1Data) !== JSON.stringify(savedStep1Data);
+          // Check if data has changed since last save
+          const hasDataChanged = !savedStep1Data || 
+            JSON.stringify(currentFormData) !== JSON.stringify(savedStep1Data);
 
-          if (hasChanged) {
-            const response = await apiService.submitPersonalDetails({
+          // Only make API call if data has changed
+          if (hasDataChanged) {
+            // Format data for API
+            const apiPayload = {
               name: formData.name,
               email: formData.email,
               phone: formData.phone,
               dateOfBirth: new Date(formData.dateOfBirth).toISOString(),
-              city: formData.city
-            });
+              city: formData.city,
+              vapingFrequencyValue: parseInt(formData.vapingFrequencyValue),
+              vapingFrequencyCadence: formData.vapingFrequencyCadence
+            };
+
+            // Update existing application or create new one
+            const response = applicationId
+              ? await apiService.updatePersonalDetails(applicationId, apiPayload)
+              : await apiService.submitPersonalDetails(apiPayload);
             
-            setApplicationId(response.data.applicationId);
-            setApplicationNumber(response.data.applicationNumber);
-            setSavedStep1Data(currentStep1Data);
+            // Store applicationId and applicationNumber if this is a new application
+            if (!applicationId) {
+              setApplicationId(response.data.applicationId);
+              setApplicationNumber(response.data.applicationNumber);
+            }
             
+            // Save to localStorage and state
+            localStorage.setItem('vapeguard_step1', JSON.stringify(currentFormData));
+            setSavedStep1Data(currentFormData);
+            
+            // Upload bill photo if feature is enabled
             if (isFeatureEnabled('BILL_PHOTO_ENABLED') && formData.billPhoto) {
               await apiService.uploadBillPhoto(response.data.applicationId, formData.billPhoto);
             }
           }
         }
+        
+        // Auto-select insurance plan based on current vaping frequency
+        if (insurancePlans.length > 0) {
+          const recommendedPlan = recommendPlanBasedOnFrequency(
+            formData.vapingFrequencyValue, 
+            formData.vapingFrequencyCadence
+          );
+          
+          // Update plan if recommendation exists and is different from current selection
+          if (recommendedPlan && recommendedPlan !== formData.selectedInsurance) {
+            setFormData(prev => ({
+              ...prev,
+              selectedInsurance: recommendedPlan
+            }));
+          }
+        }
+        
         setCurrentStep(2);
       } else if (currentStep === 2 && validateStep2()) {
         if (backendConnected && applicationId) {
@@ -786,6 +950,8 @@ const VapeInsurancePortal = () => {
           formData.dateOfBirth &&
           formData.city?.trim() &&
           formData.phone?.trim() &&
+          formData.vapingFrequencyValue &&
+          formData.vapingFrequencyCadence &&
           // Bill photo required only if feature is enabled
           (!isFeatureEnabled('BILL_PHOTO_ENABLED') || formData.billPhoto) &&
           calculateAge(formData.dateOfBirth) > 17 &&
@@ -836,6 +1002,8 @@ const VapeInsurancePortal = () => {
             isEmailVerified={isEmailVerified(verificationStatus)}
             scrollToError={shouldScrollToError}
             onScrollComplete={() => setShouldScrollToError(false)}
+            maxVapingFrequency={getMaxVapingFrequency(formData.vapingFrequencyCadence)}
+            isEmailLocked={!!applicationId}
           />
         );
 

@@ -106,6 +106,9 @@ class DatabaseMigration {
           dateOfBirth: oldApp.personalDetails.dateOfBirth,
           city: oldApp.personalDetails.city,
           age: oldApp.personalDetails.age,
+          // Set default vaping frequency for migrated users
+          vapingFrequencyValue: oldApp.personalDetails.vapingFrequencyValue || 1,
+          vapingFrequencyCadence: oldApp.personalDetails.vapingFrequencyCadence || 'per_day',
           metadata: oldApp.metadata || {}
         });
         await user.save();
