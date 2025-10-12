@@ -47,7 +47,7 @@ export default function EarlyAdopters() {
             Be Among the First
           </h2>
           <p className="text-xl text-purple-100 max-w-3xl mx-auto">
-            We're just getting started, and we're building this with transparency at the core. Join us early and help shape the future of specialized health coverage.
+            We&apos;re just getting started, and we&apos;re building this with transparency at the core. Join us early and help shape the future of specialized health coverage.
           </p>
         </motion.div>
 

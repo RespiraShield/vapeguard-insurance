@@ -63,7 +63,7 @@ export default function Footer() {
             <p>&copy; 2025 RespiraShield Insurance. All rights reserved.</p>
           </div>
           <p className="text-xs text-gray-500 mt-4 text-center">
-            This is a market research initiative. We're gathering interest to assess demand for specialized insurance solutions.
+            This is a market research initiative. We&apos;re gathering interest to assess demand for specialized insurance solutions.
           </p>
         </div>
       </div>
