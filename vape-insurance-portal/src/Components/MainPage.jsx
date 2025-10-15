@@ -49,6 +49,30 @@ const VapeInsurancePortal = () => {
   const [verificationStatus, setVerificationStatus] = useState({ email: false, phone: false });
   const [savedStep1Data, setSavedStep1Data] = useState(null);
 
+  // Clean up stale verification data on component mount
+  useEffect(() => {
+    // Remove old localStorage keys (migration)
+    localStorage.removeItem('verifiedEmail');
+    localStorage.removeItem('verificationStatus');
+    
+    // Validate verificationData - clear if stale (older than 1 hour)
+    const savedData = localStorage.getItem('verificationData');
+    if (savedData) {
+      try {
+        const { timestamp } = JSON.parse(savedData);
+        const isStale = Date.now() - timestamp > 60 * 60 * 1000; // 1 hour
+        if (isStale) {
+          localStorage.removeItem('verificationData');
+          setVerificationStatus({ email: false, phone: false });
+        }
+      } catch (error) {
+        // Invalid data, clear it
+        localStorage.removeItem('verificationData');
+        setVerificationStatus({ email: false, phone: false });
+      }
+    }
+  }, []); // Run once on mount
+
   // Check backend connectivity on component mount
   useEffect(() => {
     const checkBackendConnection = async () => {
@@ -103,6 +127,23 @@ const VapeInsurancePortal = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    // If email is being changed, immediately reset verification status
+    if (name === 'email' && value !== formData.email) {
+      // Reset verification status when email changes
+      setVerificationStatus({ email: false, phone: false });
+      localStorage.removeItem('verifiedEmail');
+      localStorage.removeItem('verificationStatus');
+      localStorage.removeItem('verificationData');
+      
+      // Clear email verification error
+      if (errors.email) {
+        setErrors((prev) => ({
+          ...prev,
+          email: "",
+        }));
+      }
+    }
     
     // Apply smart limits for vaping frequency value
     if (name === 'vapingFrequencyValue') {
@@ -172,15 +213,14 @@ const VapeInsurancePortal = () => {
         break;
 
       case "vapingFrequencyValue":
-        if (!value.trim()) {
-          newErrors.vapingFrequencyValue = "Vaping frequency value is required";
-        } else {
+        // Optional field - only validate if value is provided
+        if (value.trim()) {
           const numValue = parseInt(value.trim());
           const maxLimit = getMaxVapingFrequency(formData.vapingFrequencyCadence);
           
           if (isNaN(numValue) || numValue < 1) {
             newErrors.vapingFrequencyValue = "Please enter a valid number (minimum 1)";
-          } else if (numValue > maxLimit) {
+          } else if (formData.vapingFrequencyCadence && numValue > maxLimit) {
             const cadenceLabel = {
               per_day: 'per day',
               per_week: 'per week',
@@ -191,15 +231,14 @@ const VapeInsurancePortal = () => {
           } else {
             delete newErrors.vapingFrequencyValue;
           }
+        } else {
+          delete newErrors.vapingFrequencyValue;
         }
         break;
 
       case "vapingFrequencyCadence":
-        if (!value) {
-          newErrors.vapingFrequencyCadence = "Please select a frequency cadence";
-        } else {
-          delete newErrors.vapingFrequencyCadence;
-        }
+        // Optional field - no validation required
+        delete newErrors.vapingFrequencyCadence;
         break;
 
       case "upiId":
@@ -407,9 +446,14 @@ const VapeInsurancePortal = () => {
         await apiService.verifyEmailOTP(formData.email, otp);
         const newStatus = { ...verificationStatus, email: true };
         setVerificationStatus(newStatus);
-        // Persist verification status and verified email to localStorage
-        localStorage.setItem('verificationStatus', JSON.stringify(newStatus));
-        localStorage.setItem('verifiedEmail', formData.email);
+        // Persist verification status with application ID to prevent cross-session contamination
+        const verificationData = {
+          email: formData.email,
+          status: newStatus,
+          timestamp: Date.now(),
+          applicationId: applicationId || null
+        };
+        localStorage.setItem('verificationData', JSON.stringify(verificationData));
         setErrors(prev => ({ ...prev, email: '' }));
       } catch (error) {
         console.error('Email OTP Verification Error:', error);
@@ -442,47 +486,39 @@ const VapeInsurancePortal = () => {
     loadVerificationStatus();
   }, [applicationId, backendConnected]);
 
-  // Restore verification status when navigating to step 1
+  // Restore verification status ONLY for the same application session
   useEffect(() => {
-    if (currentStep === 1 && formData.email) {
-      const savedEmail = localStorage.getItem('verifiedEmail');
-      const savedStatus = localStorage.getItem('verificationStatus');
+    if (currentStep === 1 && formData.email && applicationId) {
+      const savedData = localStorage.getItem('verificationData');
       
-      if (savedEmail === formData.email && savedStatus) {
-        const parsedStatus = JSON.parse(savedStatus);
-        
-        // Handle both simple boolean format and complex object format from backend
-        const savedEmailVerified = typeof parsedStatus.email === 'object' 
-          ? parsedStatus.email.verified 
-          : parsedStatus.email;
-        
-        const currentEmailVerified = typeof verificationStatus.email === 'object'
-          ? verificationStatus.email.verified
-          : verificationStatus.email;
-        
-        if (savedEmailVerified && !currentEmailVerified) {
-          // Normalize to simple boolean format
-          const normalizedStatus = {
-            email: savedEmailVerified,
-            phone: typeof parsedStatus.phone === 'object' ? parsedStatus.phone.verified : parsedStatus.phone
-          };
-          setVerificationStatus(normalizedStatus);
-          localStorage.setItem('verificationStatus', JSON.stringify(normalizedStatus));
-        }
-      } else if (savedEmail && savedEmail !== formData.email) {
-        const currentEmailVerified = typeof verificationStatus.email === 'object'
-          ? verificationStatus.email.verified
-          : verificationStatus.email;
+      if (savedData) {
+        try {
+          const { email, status, timestamp, applicationId: savedAppId } = JSON.parse(savedData);
           
-        if (currentEmailVerified) {
-          const resetStatus = { email: false, phone: false };
-          setVerificationStatus(resetStatus);
-          localStorage.setItem('verificationStatus', JSON.stringify(resetStatus));
-          localStorage.removeItem('verifiedEmail');
+          // Only restore if:
+          // 1. Email matches
+          // 2. Application ID matches (same session)
+          // 3. Verification is recent (within 1 hour)
+          const isRecent = Date.now() - timestamp < 60 * 60 * 1000; // 1 hour
+          const isSameSession = savedAppId === applicationId;
+          const isSameEmail = email === formData.email;
+          
+          if (isSameEmail && isSameSession && isRecent && !isEmailVerified(verificationStatus)) {
+            setVerificationStatus(status);
+          } else if (!isSameEmail || !isSameSession || !isRecent) {
+            // Clear stale or mismatched verification data
+            localStorage.removeItem('verificationData');
+            if (isEmailVerified(verificationStatus)) {
+              setVerificationStatus({ email: false, phone: false });
+            }
+          }
+        } catch (error) {
+          console.error('Error parsing verification data:', error);
+          localStorage.removeItem('verificationData');
         }
       }
     }
-  }, [currentStep, formData.email, verificationStatus.email]);
+  }, [currentStep, formData.email, applicationId]);
 
   const validateStep1 = () => {
     const newErrors = {};
@@ -534,16 +570,15 @@ const VapeInsurancePortal = () => {
       newErrors.city = "Please select your city from the dropdown";
     }
 
-    // Vaping frequency validation
-    if (!formData.vapingFrequencyValue || !formData.vapingFrequencyValue.toString().trim()) {
-      newErrors.vapingFrequencyValue = "Vaping frequency value is required";
-    } else {
+    // Vaping frequency validation - now optional
+    // Only validate if user has provided values
+    if (formData.vapingFrequencyValue && formData.vapingFrequencyValue.toString().trim()) {
       const numValue = parseInt(formData.vapingFrequencyValue.toString().trim());
       const maxLimit = getMaxVapingFrequency(formData.vapingFrequencyCadence);
       
       if (isNaN(numValue) || numValue < 1) {
         newErrors.vapingFrequencyValue = "Please enter a valid number (minimum 1)";
-      } else if (numValue > maxLimit) {
+      } else if (formData.vapingFrequencyCadence && numValue > maxLimit) {
         const cadenceLabel = {
           per_day: 'per day',
           per_week: 'per week',
@@ -554,9 +589,7 @@ const VapeInsurancePortal = () => {
       }
     }
 
-    if (!formData.vapingFrequencyCadence) {
-      newErrors.vapingFrequencyCadence = "Please select a frequency cadence";
-    }
+    // Vaping frequency cadence is now optional - no validation required
 
     // Bill photo validation - controlled by feature flag
     if (isFeatureEnabled('BILL_PHOTO_ENABLED') && !formData.billPhoto) {
@@ -569,14 +602,9 @@ const VapeInsurancePortal = () => {
   };
 
   const validateStep2 = () => {
-    const newErrors = {};
-
-    if (!formData.selectedInsurance) {
-      newErrors.insurance = "Please select an insurance plan to continue";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    // Insurance selection is now optional - users can select later
+    // No validation errors, always return true
+    return true;
   };
 
   const validateStep3 = () => {
@@ -714,6 +742,32 @@ const VapeInsurancePortal = () => {
     }
   };
 
+  const handleSkipInsuranceSelection = async () => {
+    try {
+      // Clear any insurance selection errors
+      setErrors(prev => ({
+        ...prev,
+        insurance: "",
+        selectedInsurance: ""
+      }));
+
+      // Clear the selected insurance
+      setFormData(prev => ({
+        ...prev,
+        selectedInsurance: null
+      }));
+
+      // Navigate to next step (payment or enrollment)
+      if (isFeatureEnabled('PAYMENT_ENABLED')) {
+        setCurrentStep(3); // Go to payment step
+      } else {
+        setCurrentStep(3); // Go to enrollment step (since payment is disabled)
+      }
+    } catch (error) {
+      console.error('Error skipping insurance selection:', error);
+    }
+  };
+
   const handlePaymentMethodSelect = (method) => {
     // For wallet payments, we'll use the specific provider (phonepe, gpay, paytm)
     // The 'wallet' option is just for UI, we'll map it to a specific provider when processing
@@ -790,6 +844,18 @@ const VapeInsurancePortal = () => {
             if (!applicationId) {
               setApplicationId(response.data.applicationId);
               setApplicationNumber(response.data.applicationNumber);
+              
+              // Update verification data with the new applicationId
+              const savedVerificationData = localStorage.getItem('verificationData');
+              if (savedVerificationData) {
+                try {
+                  const verificationData = JSON.parse(savedVerificationData);
+                  verificationData.applicationId = response.data.applicationId;
+                  localStorage.setItem('verificationData', JSON.stringify(verificationData));
+                } catch (error) {
+                  console.error('Error updating verification data:', error);
+                }
+              }
             }
             
             // Save to localStorage and state
@@ -821,8 +887,8 @@ const VapeInsurancePortal = () => {
         
         setCurrentStep(2);
       } else if (currentStep === 2 && validateStep2()) {
-        if (backendConnected && applicationId) {
-          // Submit insurance selection to backend
+        if (backendConnected && applicationId && formData.selectedInsurance) {
+          // Submit insurance selection to backend only if a plan is selected
           await apiService.selectInsurance(applicationId, formData.selectedInsurance);
         }
         // Check if payment is enabled, if not skip to enrollment step
@@ -950,15 +1016,14 @@ const VapeInsurancePortal = () => {
           formData.dateOfBirth &&
           formData.city?.trim() &&
           formData.phone?.trim() &&
-          formData.vapingFrequencyValue &&
-          formData.vapingFrequencyCadence &&
           // Bill photo required only if feature is enabled
           (!isFeatureEnabled('BILL_PHOTO_ENABLED') || formData.billPhoto) &&
           calculateAge(formData.dateOfBirth) > 17 &&
           isEmailVerified(verificationStatus)
         );
       case 2:
-        return formData.selectedInsurance;
+        // Insurance selection is now optional - user can select later
+        return true;
       case 3:
         if (!formData.paymentMethod) return false;
 
@@ -1012,6 +1077,7 @@ const VapeInsurancePortal = () => {
           <InsuranceSelectionStep
             selectedInsurance={formData.selectedInsurance}
             handleInsuranceSelect={handleInsuranceSelect}
+            handleSkipSelection={handleSkipInsuranceSelection}
             errors={errors}
             insurancePlans={insurancePlans}
           />

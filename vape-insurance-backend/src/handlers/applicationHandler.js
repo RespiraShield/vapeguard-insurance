@@ -36,29 +36,44 @@ class ApplicationHandler {
       
       if (!user) {
         // Create new user with verified email status
-        user = new User({
+        const userData = {
           name,
           email,
           phone,
           dateOfBirth: new Date(dateOfBirth),
           city,
-          vapingFrequencyValue,
-          vapingFrequencyCadence,
           emailVerified: true,
           emailVerifiedAt: new Date(),
           metadata: {
             ipAddress: req.ip,
             userAgent: req.get('User-Agent')
           }
-        });
+        };
+        
+        // Only include vaping frequency if provided (not empty/null/undefined)
+        if (vapingFrequencyValue && vapingFrequencyCadence) {
+          userData.vapingFrequencyValue = vapingFrequencyValue;
+          userData.vapingFrequencyCadence = vapingFrequencyCadence;
+        }
+        
+        user = new User(userData);
         await user.save();
       } else {
         // Update existing unverified user and mark email as verified
         user.name = name;
         user.city = city;
         user.dateOfBirth = new Date(dateOfBirth);
-        user.vapingFrequencyValue = vapingFrequencyValue;
-        user.vapingFrequencyCadence = vapingFrequencyCadence;
+        
+        // Only update vaping frequency if provided (not empty/null/undefined)
+        if (vapingFrequencyValue && vapingFrequencyCadence) {
+          user.vapingFrequencyValue = vapingFrequencyValue;
+          user.vapingFrequencyCadence = vapingFrequencyCadence;
+        } else {
+          // Clear vaping frequency if not provided
+          user.vapingFrequencyValue = undefined;
+          user.vapingFrequencyCadence = undefined;
+        }
+        
         if (!user.emailVerified) {
           user.emailVerified = true;
           user.emailVerifiedAt = new Date();
@@ -132,8 +147,17 @@ class ApplicationHandler {
       user.phone = phone;
       user.dateOfBirth = new Date(dateOfBirth);
       user.city = city;
-      user.vapingFrequencyValue = vapingFrequencyValue;
-      user.vapingFrequencyCadence = vapingFrequencyCadence;
+      
+      // Only update vaping frequency if provided (not empty/null/undefined)
+      if (vapingFrequencyValue && vapingFrequencyCadence) {
+        user.vapingFrequencyValue = vapingFrequencyValue;
+        user.vapingFrequencyCadence = vapingFrequencyCadence;
+      } else {
+        // Clear vaping frequency if not provided
+        user.vapingFrequencyValue = undefined;
+        user.vapingFrequencyCadence = undefined;
+      }
+      
       await user.save();
 
       // Update application metadata
@@ -167,6 +191,28 @@ class ApplicationHandler {
     try {
       const { applicationId } = req.params;
       const { selectedInsurance } = req.body;
+
+      // Insurance selection is now optional - allow null/empty values
+      if (!selectedInsurance || selectedInsurance === '' || selectedInsurance === null) {
+        // Find application but don't update insurance plan
+        const application = await Application.findById(applicationId);
+        
+        if (!application) {
+          return res.status(404).json({
+            success: false,
+            error: 'Application not found'
+          });
+        }
+
+        return res.json({
+          success: true,
+          data: {
+            applicationId: application._id,
+            selectedPlan: null,
+            message: 'You can select a plan later'
+          }
+        });
+      }
 
       // Find the insurance plan by MongoDB _id
       const insurancePlan = await InsurancePlan.findById(selectedInsurance);
@@ -456,13 +502,8 @@ class ApplicationHandler {
         });
       }
 
-      // Check if insurance plan is selected
-      if (!application.insurancePlanId) {
-        return res.status(400).json({
-          success: false,
-          error: 'Please select an insurance plan before enrolling'
-        });
-      }
+      // Insurance plan selection is now optional - allow enrollment without plan
+      // Users can select a plan later
 
       // Check basic requirements (verification and bill photo)
       const canSubmit = await application.canSubmit();
@@ -486,7 +527,8 @@ class ApplicationHandler {
           status: application.status,
           isEnrolled: application.isEnrolled,
           enrolledAt: application.enrolledAt,
-          insurancePlan: application.insurancePlanId
+          insurancePlan: application.insurancePlanId || null,
+          message: application.insurancePlanId ? 'Enrollment successful' : 'Enrollment successful. You can select an insurance plan later.'
         }
       });
     } catch (error) {

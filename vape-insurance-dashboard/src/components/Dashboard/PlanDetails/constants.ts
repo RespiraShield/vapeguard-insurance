@@ -8,8 +8,14 @@ export const PLAN_MESSAGES = {
 
 export const ACTIVATION_STEPS = {
   PLAN_SELECTED: {
-    title: 'Plan Selected',
-    description: 'You\'ve chosen your insurance plan',
+    completed: {
+      title: 'Plan Selected',
+      description: 'You\'ve chosen your insurance plan',
+    },
+    pending: {
+      title: 'Plan Not Selected',
+      description: 'Choose your insurance plan to continue',
+    },
   },
   DETAILS_VERIFIED: {
     completed: {

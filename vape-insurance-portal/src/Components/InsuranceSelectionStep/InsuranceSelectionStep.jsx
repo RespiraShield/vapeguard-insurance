@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, Typography, Spin } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, ClockCircleOutlined, RightOutlined } from '@ant-design/icons';
 import { INSURANCE_SELECTION_STEP } from '../../constants/texts';
 import styles from './InsuranceSelectionStep.module.css';
 
@@ -9,6 +9,7 @@ const { Title, Text } = Typography;
 const InsuranceSelectionStep = ({ 
   selectedInsurance = null, 
   handleInsuranceSelect = () => {}, 
+  handleSkipSelection = () => {},
   errors = {},
   insurancePlans = []
 }) => {
@@ -62,6 +63,9 @@ const InsuranceSelectionStep = ({
     <div className={styles.container}>
       <Title level={2} className={styles.title}>{INSURANCE_SELECTION_STEP.TITLE}</Title>
       <Text className={styles.subtitle}>{INSURANCE_SELECTION_STEP.SUBTITLE}</Text>
+      <Text className={styles.optionalNote} style={{ display: 'block', marginTop: '8px', color: '#666', fontSize: '14px' }}>
+        You can select a plan now or skip and choose later
+      </Text>
       
       <div className={styles.plansContainer}>
         {(insurancePlans || []).map((plan) => (
@@ -129,6 +133,28 @@ const InsuranceSelectionStep = ({
           />
         </div>
       )}
+      
+      {/* Select Plan Later Option */}
+      <div className={styles.skipOptionContainer}>
+        <div className={styles.divider}>
+          <span className={styles.dividerText}>OR</span>
+        </div>
+        
+        <button 
+          type="button"
+          className={styles.skipButton}
+          onClick={handleSkipSelection}
+        >
+          <div className={styles.skipButtonContent}>
+            <ClockCircleOutlined className={styles.skipIcon} />
+            <div className={styles.skipTextContainer}>
+              <span className={styles.skipTitle}>I'll Choose a Plan Later</span>
+              <span className={styles.skipSubtitle}>You can select your insurance plan after reviewing your options</span>
+            </div>
+            <RightOutlined className={styles.skipArrow} />
+          </div>
+        </button>
+      </div>
     </div>
   );
 };
