@@ -167,8 +167,8 @@ describe('Application Validators', () => {
       expect(error.details[0].message).toContain('Vaping frequency cannot exceed 999');
     });
 
-    test('should reject missing vaping frequency value', () => {
-      const invalidData = {
+    test('should accept missing vaping frequency value (now optional)', () => {
+      const validData = {
         name: 'John Doe',
         email: 'john@example.com',
         phone: '9876543210',
@@ -177,9 +177,8 @@ describe('Application Validators', () => {
         vapingFrequencyCadence: 'per_day'
       };
 
-      const { error } = personalDetailsSchema.validate(invalidData);
-      expect(error).toBeDefined();
-      expect(error.details[0].message).toContain('Vaping frequency value is required');
+      const { error } = personalDetailsSchema.validate(validData);
+      expect(error).toBeUndefined();
     });
 
     test('should reject invalid vaping frequency cadence', () => {
@@ -198,8 +197,8 @@ describe('Application Validators', () => {
       expect(error.details[0].message).toContain('Cadence must be one of: per_day, per_week, per_month, per_year');
     });
 
-    test('should reject missing vaping frequency cadence', () => {
-      const invalidData = {
+    test('should accept missing vaping frequency cadence (now optional)', () => {
+      const validData = {
         name: 'John Doe',
         email: 'john@example.com',
         phone: '9876543210',
@@ -208,9 +207,8 @@ describe('Application Validators', () => {
         vapingFrequencyValue: 5
       };
 
-      const { error } = personalDetailsSchema.validate(invalidData);
-      expect(error).toBeDefined();
-      expect(error.details[0].message).toContain('Vaping frequency cadence is required');
+      const { error } = personalDetailsSchema.validate(validData);
+      expect(error).toBeUndefined();
     });
 
     test('should accept all valid cadence values', () => {
@@ -229,6 +227,19 @@ describe('Application Validators', () => {
         expect(error).toBeUndefined();
       });
     });
+
+    test('should accept personal details without vaping frequency (now optional)', () => {
+      const validData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '9876543210',
+        dateOfBirth: '1990-01-01',
+        city: 'Mumbai'
+      };
+
+      const { error } = personalDetailsSchema.validate(validData);
+      expect(error).toBeUndefined();
+    });
   });
 
   describe('Insurance Selection Schema', () => {
@@ -246,20 +257,32 @@ describe('Application Validators', () => {
       });
     });
 
-    test('should reject invalid plan ID', () => {
-      const invalidData = { selectedInsurance: 4 };
+    test('should accept any numeric plan ID', () => {
+      const validData = { selectedInsurance: 999 };
 
-      const { error } = insuranceSelectionSchema.validate(invalidData);
-      expect(error).toBeDefined();
-      expect(error.details[0].message).toContain('Please select a valid insurance plan');
+      const { error } = insuranceSelectionSchema.validate(validData);
+      expect(error).toBeUndefined();
     });
 
-    test('should reject missing selection', () => {
-      const invalidData = {};
+    test('should accept missing selection (now optional)', () => {
+      const validData = {};
 
-      const { error } = insuranceSelectionSchema.validate(invalidData);
-      expect(error).toBeDefined();
-      expect(error.details[0].message).toContain('Insurance plan selection is required');
+      const { error } = insuranceSelectionSchema.validate(validData);
+      expect(error).toBeUndefined();
+    });
+
+    test('should accept null selection', () => {
+      const validData = { selectedInsurance: null };
+
+      const { error } = insuranceSelectionSchema.validate(validData);
+      expect(error).toBeUndefined();
+    });
+
+    test('should accept empty string selection', () => {
+      const validData = { selectedInsurance: '' };
+
+      const { error } = insuranceSelectionSchema.validate(validData);
+      expect(error).toBeUndefined();
     });
   });
 

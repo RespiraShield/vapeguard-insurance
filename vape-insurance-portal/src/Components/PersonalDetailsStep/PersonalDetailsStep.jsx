@@ -562,8 +562,8 @@ const PersonalDetailsStep = ({
               <div className={styles.vapingInfoHeader}>
                 <span className={styles.vapingInfoIcon}>💨</span>
                 <div className={styles.vapingInfoTextContainer}>
-                  <span className={styles.vapingInfoTitle}>How often do you vape?</span>
-                  <span className={styles.vapingInfoSubtitle}>Help us recommend the perfect coverage for you</span>
+                  <span className={styles.vapingInfoTitle}>How often do you vape? (Optional)</span>
+                  <span className={styles.vapingInfoSubtitle}>Help us recommend the perfect coverage for you. You can skip this if you prefer.</span>
                 </div>
               </div>
               

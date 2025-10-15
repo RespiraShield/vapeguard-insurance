@@ -353,8 +353,17 @@
 
 .pending-actions {
   display: flex;
+  flex-direction: column;
   gap: 12px;
+  align-items: center;
   justify-content: center;
+}
+
+.no-plan-helper-text {
+  margin-top: 8px;
+  display: block;
+  text-align: center;
+  font-size: 13px;
 }
 
 .action-button,
@@ -424,10 +433,6 @@
 
   .pending-icon {
     font-size: 32px;
-  }
-
-  .pending-actions {
-    flex-direction: column;
   }
 
   .action-button,

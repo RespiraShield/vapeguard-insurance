@@ -63,17 +63,17 @@ const personalDetailsSchema = Joi.object({
   
   vapingFrequencyCadence: Joi.string()
     .valid('per_day', 'per_week', 'per_month', 'per_year')
-    .required()
+    .optional()
+    .allow('', null)
     .messages({
-      'any.only': 'Cadence must be one of: per_day, per_week, per_month, per_year',
-      'any.required': 'Vaping frequency cadence is required'
+      'any.only': 'Cadence must be one of: per_day, per_week, per_month, per_year'
     }),
   
   vapingFrequencyValue: Joi.number()
     .integer()
     .min(1)
-    .max(Joi.ref('$maxLimit'))
-    .required()
+    .optional()
+    .allow('', null)
     .when('vapingFrequencyCadence', {
       is: 'per_day',
       then: Joi.number().max(30).messages({
@@ -101,20 +101,21 @@ const personalDetailsSchema = Joi.object({
     .messages({
       'number.base': 'Vaping frequency value must be a number',
       'number.min': 'Vaping frequency must be at least 1',
-      'number.max': 'Vaping frequency value exceeds maximum allowed',
-      'any.required': 'Vaping frequency value is required'
+      'number.max': 'Vaping frequency value exceeds maximum allowed'
     })
 });
 
 // Insurance Selection Validation Schema
 const insuranceSelectionSchema = Joi.object({
-  selectedInsurance: Joi.number()
-    .integer()
-    .valid(1, 2, 3)
-    .required()
+  selectedInsurance: Joi.alternatives()
+    .try(
+      Joi.string().valid(''),
+      Joi.allow(null),
+      Joi.number().integer()
+    )
+    .optional()
     .messages({
-      'any.only': 'Please select a valid insurance plan',
-      'any.required': 'Insurance plan selection is required'
+      'any.only': 'Please select a valid insurance plan'
     })
 });
 

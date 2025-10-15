@@ -133,8 +133,16 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
                   <ClockCircleOutlined className="step-icon" />
                 )}
                 <div className="step-content">
-                  <Text strong>{ACTIVATION_STEPS.PLAN_SELECTED.title}</Text>
-                  <Text type="secondary">{ACTIVATION_STEPS.PLAN_SELECTED.description}</Text>
+                  <Text strong>
+                    {activationStatus.planSelected 
+                      ? ACTIVATION_STEPS.PLAN_SELECTED.completed.title 
+                      : ACTIVATION_STEPS.PLAN_SELECTED.pending.title}
+                  </Text>
+                  <Text type="secondary">
+                    {activationStatus.planSelected 
+                      ? ACTIVATION_STEPS.PLAN_SELECTED.completed.description 
+                      : ACTIVATION_STEPS.PLAN_SELECTED.pending.description}
+                  </Text>
                 </div>
               </div>
 
@@ -199,9 +207,20 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
             </div>
 
             <div className="pending-actions">
-              <Button type="primary" size="large" className="action-button" onClick={showPlanModal}>
-                View Plan Details
+              <Button 
+                type="primary" 
+                size="large" 
+                className="action-button" 
+                onClick={showPlanModal}
+                disabled={!selectedPlan}
+              >
+                {selectedPlan ? 'View Plan Details' : 'No Plan Selected'}
               </Button>
+              {!selectedPlan && (
+                <Text type="secondary" className="no-plan-helper-text">
+                  Select an insurance plan to view details
+                </Text>
+              )}
             </div>
           </div>
         </Card>

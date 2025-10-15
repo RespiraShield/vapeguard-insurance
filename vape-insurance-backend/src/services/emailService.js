@@ -33,16 +33,16 @@ class EmailService {
 
   async sendOTPEmail(to, name, otp, expiryMinutes = 10) {
     try {
-      const htmlContent = this.generateOTPEmailHTML(name, otp, 'VapeGuard Insurance', expiryMinutes);
+      const htmlContent = this.generateOTPEmailHTML(name, otp, 'RespiraShield Insurance', expiryMinutes);
       const fromEmail = process.env.RESEND_FROM_EMAIL || process.env.FROM_EMAIL || 'onboarding@resend.dev';
-      const fromName = process.env.FROM_NAME || 'VapeGuard Insurance';
+      const fromName = process.env.FROM_NAME || 'RespiraShield Insurance';
 
       // Use Resend (preferred)
       if (this.provider === 'resend') {
         const result = await this.resend.emails.send({
           from: `${fromName} <${fromEmail}>`,
           to: [to],
-          subject: 'VapeGuard Insurance - Email Verification Code',
+          subject: `${otp} is your RespiraShield verification code`,
           html: htmlContent,
         });
 
@@ -69,7 +69,7 @@ class EmailService {
             email: process.env.SENDGRID_FROM_EMAIL || fromEmail,
             name: fromName
           },
-          subject: 'VapeGuard Insurance - Email Verification Code',
+          subject: `${otp} is your RespiraShield verification code`,
           html: htmlContent,
           text: this.htmlToText(htmlContent)
         };
@@ -91,7 +91,7 @@ class EmailService {
       // Console fallback (development)
       console.log('\n📧 ============ EMAIL OTP (Development Mode) ============');
       console.log(`To: ${to}`);
-      console.log(`Subject: VapeGuard Insurance - Email Verification Code`);
+      console.log(`Subject: ${otp} is your RespiraShield verification code`);
       console.log(`OTP: ${otp}`);
       console.log(`Expires in: ${expiryMinutes} minutes`);
       console.log('========================================================\n');
@@ -138,16 +138,16 @@ re      }
 
   async sendLoginOTPEmail(to, name, otp, expiryMinutes = 5) {
     try {
-      const htmlContent = this.generateLoginOTPEmailHTML(name, otp, 'VapeGuard Dashboard', expiryMinutes);
+      const htmlContent = this.generateLoginOTPEmailHTML(name, otp, 'RespiraShield Dashboard', expiryMinutes);
       const fromEmail = process.env.RESEND_FROM_EMAIL || process.env.FROM_EMAIL || 'onboarding@resend.dev';
-      const fromName = process.env.FROM_NAME || 'VapeGuard Insurance';
+      const fromName = process.env.FROM_NAME || 'RespiraShield Insurance';
 
       // Use Resend (preferred)
       if (this.provider === 'resend') {
         const result = await this.resend.emails.send({
           from: `${fromName} <${fromEmail}>`,
           to: [to],
-          subject: 'VapeGuard Dashboard - Login Verification Code',
+          subject: `${otp} is your RespiraShield login code`,
           html: htmlContent,
         });
 
@@ -174,7 +174,7 @@ re      }
             email: process.env.SENDGRID_FROM_EMAIL || fromEmail,
             name: fromName
           },
-          subject: 'VapeGuard Dashboard - Login Verification Code',
+          subject: `${otp} is your RespiraShield login code`,
           html: htmlContent,
           text: this.htmlToText(htmlContent)
         };
@@ -196,7 +196,7 @@ re      }
       // Console fallback (development)
       console.log('\n📧 ============ LOGIN OTP (Development Mode) ============');
       console.log(`To: ${to}`);
-      console.log(`Subject: VapeGuard Dashboard - Login Verification Code`);
+      console.log(`Subject: ${otp} is your RespiraShield login code`);
       console.log(`OTP: ${otp}`);
       console.log(`Expires in: ${expiryMinutes} minutes`);
       console.log('========================================================\n');
@@ -257,7 +257,7 @@ re      }
         </div>
         <div class="content">
             <h2>Hello ${name || 'Valued Customer'},</h2>
-            <p>Thank you for choosing VapeGuard Insurance! To complete your application, please verify your email address using the OTP below:</p>
+            <p>Thank you for choosing RespiraShield Insurance! To complete your application, please verify your email address using the OTP below:</p>
             
             <div class="otp-box">
                 <p style="margin: 0; font-size: 16px; color: #666;">Your Verification Code</p>
@@ -266,13 +266,13 @@ re      }
             </div>
 
             <div class="warning">
-                <strong>⚠️ Security Notice:</strong> Never share this code with anyone. VapeGuard will never ask for your OTP via phone or email.
+                <strong>⚠️ Security Notice:</strong> Never share this code with anyone. RespiraShield will never ask for your OTP via phone or email.
             </div>
 
             <p>If you didn't request this verification, please ignore this email or contact our support team.</p>
             
             <div class="footer">
-                <p>Best regards,<br><strong>VapeGuard Insurance Team</strong></p>
+                <p>Best regards,<br><strong>RespiraShield Insurance Team</strong></p>
                 <p style="font-size: 12px; color: #999;">This is an automated message. Please do not reply to this email.</p>
             </div>
         </div>
@@ -308,7 +308,7 @@ re      }
         </div>
         <div class="content">
             <h2>Welcome back, ${name || 'User'}!</h2>
-            <p>You're attempting to log in to your VapeGuard Dashboard. Please use the verification code below to complete your login:</p>
+            <p>You're attempting to log in to your RespiraShield Dashboard. Please use the verification code below to complete your login:</p>
             
             <div class="otp-box">
                 <p style="margin: 0; font-size: 16px; color: #666;">Your Login Code</p>
@@ -323,7 +323,7 @@ re      }
             <p>This code will expire in ${expiryMinutes} minutes for your security.</p>
             
             <div class="footer">
-                <p>Best regards,<br><strong>VapeGuard Security Team</strong></p>
+                <p>Best regards,<br><strong>RespiraShield Security Team</strong></p>
                 <p style="font-size: 12px; color: #999;">This is an automated security message. Please do not reply to this email.</p>
             </div>
         </div>

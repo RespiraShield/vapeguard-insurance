@@ -44,14 +44,16 @@ const userSchema = new mongoose.Schema({
     type: Number
   },
   
-  // Vaping Information
+  // Vaping Information (Optional - some users may prefer not to provide this)
   vapingFrequencyValue: {
     type: Number,
-    required: [true, 'Vaping frequency value is required'],
+    required: false,
     min: [1, 'Vaping frequency must be at least 1'],
     max: [10000, 'Vaping frequency cannot exceed 10000'],
     validate: {
       validator: function(value) {
+        // Only validate if value is provided
+        if (!value && value !== 0) return true;
         const limits = {
           per_day: 30,
           per_week: 200,
@@ -75,9 +77,13 @@ const userSchema = new mongoose.Schema({
   },
   vapingFrequencyCadence: {
     type: String,
-    required: [true, 'Vaping frequency cadence is required'],
-    enum: {
-      values: ['per_day', 'per_week', 'per_month', 'per_year'],
+    required: false,
+    validate: {
+      validator: function(value) {
+        // Allow empty/null values since field is optional
+        if (!value) return true;
+        return ['per_day', 'per_week', 'per_month', 'per_year'].includes(value);
+      },
       message: 'Cadence must be one of: per_day, per_week, per_month, per_year'
     }
   },
