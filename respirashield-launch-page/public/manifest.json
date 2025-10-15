@@ -1,0 +1,25 @@
+{
+  "name": "RespiraShield - Insurance for Vape Users",
+  "short_name": "RespiraShield",
+  "description": "Specialized health coverage and treatment support for vape users",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["health", "finance", "insurance"],
+  "lang": "en-US"
+}
