@@ -54,8 +54,7 @@ respirashield-launch-page/
 │   ├── layout.tsx            # Root layout with metadata
 │   └── page.tsx              # Main page (Hero + Footer)
 ├── components/
-│   ├── HeroSingleSection.tsx # Single-viewport hero section
-│   └── Footer.tsx            # Minimal footer with disclaimer
+│   └── HeroSingleSection.tsx # Single-viewport hero with inline disclaimer
 ├── public/                   # Static assets
 ├── tailwind.config.ts        # Tailwind configuration
 ├── tsconfig.json             # TypeScript configuration

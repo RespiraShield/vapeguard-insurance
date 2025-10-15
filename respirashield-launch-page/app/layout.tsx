@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: 'RespiraShield | Insurance That Actually Gets You',
     template: '%s | RespiraShield'
   },
-  description: 'Specialized health coverage and treatment support for vape users. Zero commitment, just your interest. Join early supporters shaping the future of vape insurance.',
+  description: 'Specialized health coverage and treatment support for vape / e-cigarette users. Zero commitment, just your interest. Join early supporters shaping the future of vape insurance.',
   keywords: ['vape insurance', 'health coverage', 'treatment support', 'respiratory health', 'RespiraShield', 'specialized insurance', 'vape user insurance'],
   authors: [{ name: 'RespiraShield', url: 'https://launch.respirashield.com' }],
   creator: 'RespiraShield',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'RespiraShield | Insurance That Actually Gets You',
-    description: 'Specialized health coverage and treatment support for vape users. Zero commitment, just your interest.',
+    description: 'Specialized health coverage and treatment support for vape / e-cigarette users. Zero commitment, just your interest.',
     url: 'https://launch.respirashield.com',
     siteName: 'RespiraShield',
     type: 'website',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'RespiraShield | Insurance That Actually Gets You',
-    description: 'Specialized health coverage and treatment support for vape users.',
+    description: 'Specialized health coverage and treatment support for vape / e-cigarette users.',
     creator: '@respirashield',
     // TODO: Add og-image for Twitter sharing
     // images: ['/og-image.png'],
