@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Shield, Activity, Heart, Zap, Users, ArrowRight, Check } from 'lucide-react'
+import { Shield, ArrowRight, Check } from 'lucide-react'
 
 export default function HeroSingleSection() {
   return (
@@ -28,6 +28,11 @@ export default function HeroSingleSection() {
         style={{ animationDelay: '1s' }}
         aria-hidden="true"
       />
+      <div 
+        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-pink-500/10 rounded-full blur-3xl animate-float"
+        style={{ animationDelay: '0.5s' }}
+        aria-hidden="true"
+      />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-12 text-center">
         
@@ -51,7 +56,7 @@ export default function HeroSingleSection() {
         >
           Insurance That Actually
           <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-white">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-white animate-pulse">
             Gets You
           </span>
         </motion.h1>
@@ -63,7 +68,7 @@ export default function HeroSingleSection() {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="mt-4 text-xl sm:text-2xl text-purple-100 max-w-2xl mx-auto font-medium"
         >
-          Specialized health coverage + treatment support for vape users. Zero commitment, just your interest.
+          Specialized health coverage + treatment support for vape / e-cigarette users. <span className="font-bold text-white">Zero commitment</span>, just your interest.
         </motion.p>
 
         {/* Value bullets - Icon + text, responsive layout */}
@@ -74,20 +79,19 @@ export default function HeroSingleSection() {
           className="mt-8 flex flex-wrap justify-center gap-4 sm:gap-6 text-white/90"
         >
           {[
-            { icon: Heart, text: 'Respiratory Health Focus' },
-            { icon: Activity, text: 'Treatment Coverage' },
-            { icon: Zap, text: 'Wellness Perks' },
-            { icon: Users, text: 'Community-Driven' },
-          ].map((item, index) => (
+            'Respiratory Health Focus',
+            'Treatment Coverage',
+            'Wellness Perks',
+            'Community-Driven',
+          ].map((text, index) => (
             <motion.div
-              key={item.text}
+              key={text}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5 + index * 0.1, duration: 0.4 }}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-lg hover:bg-white/30 hover:scale-105 transition-all duration-300 cursor-default"
             >
-              <item.icon className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="text-xs sm:text-sm font-medium">{item.text}</span>
+              <span className="text-xs sm:text-sm font-semibold">{text}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -104,7 +108,7 @@ export default function HeroSingleSection() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Register your interest in RespiraShield insurance (opens in new tab)"
-            className="group inline-flex items-center gap-3 px-10 py-5 bg-white text-primary rounded-full font-bold text-lg shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/50"
+            className="group inline-flex items-center gap-3 px-10 py-4 bg-white text-primary rounded-full font-bold text-lg shadow-2xl hover:shadow-purple-500/30 hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-white/50"
           >
             Register Your Interest
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
@@ -131,7 +135,7 @@ export default function HeroSingleSection() {
               className="flex items-center gap-1.5"
             >
               <Check className="w-4 h-4" />
-              <span>{text}</span>
+              <span className="font-medium">{text}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -144,6 +148,18 @@ export default function HeroSingleSection() {
           className="mt-8 text-sm text-purple-300 font-medium"
         >
           Join early supporters shaping the launch • No approvals or certifications implied
+        </motion.p>
+
+        {/* Legal disclaimer - inline */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="mt-12 text-xs text-white/75 max-w-3xl mx-auto leading-relaxed"
+        >
+          This is a market research initiative to gauge interest in specialized insurance solutions. 
+          We&apos;re gathering feedback to understand demand—no insurance products are currently offered. 
+          Your data is secure and used solely for research validation. © 2025 RespiraShield Insurance.
         </motion.p>
       </div>
     </section>

@@ -1,11 +1,10 @@
 import HeroSingleSection from '@/components/HeroSingleSection'
-import Footer from '@/components/Footer'
 
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'RespiraShield',
-  description: 'Specialized health coverage and treatment support for vape users',
+  description: 'Specialized health coverage and treatment support for vape / e-cigarette users',
   url: 'https://launch.respirashield.com',
   logo: 'https://launch.respirashield.com/Respirashield.svg',
   sameAs: [
@@ -39,7 +38,6 @@ export default function Home() {
       />
       <main className="min-h-screen">
         <HeroSingleSection />
-        <Footer />
       </main>
     </>
   )
