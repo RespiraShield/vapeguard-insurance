@@ -317,7 +317,7 @@ re      }
             </div>
 
             <div class="warning">
-                <strong>🔒 Security Alert:</strong> If you didn't attempt to log in, please ignore this email and consider changing your password.
+                <strong>🔒 Security Alert:</strong> If you didn't attempt to log in, please ignore this email. Your account uses secure code-based authentication.
             </div>
 
             <p>This code will expire in ${expiryMinutes} minutes for your security.</p>

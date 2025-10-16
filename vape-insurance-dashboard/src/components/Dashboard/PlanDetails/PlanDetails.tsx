@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import { Card, Typography, Tag, Progress, Modal, Button, Divider, Row, Col } from 'antd';
-import { SafetyOutlined, CheckCircleOutlined, ClockCircleOutlined, RocketOutlined, BulbOutlined, FileProtectOutlined, StarFilled, CrownOutlined } from '@ant-design/icons';
+import { 
+  SafetyOutlined, 
+  CheckCircleOutlined, 
+  ClockCircleOutlined, 
+  RocketOutlined, 
+  BulbOutlined, 
+  FileProtectOutlined, 
+  StarFilled, 
+  CrownOutlined
+} from '@ant-design/icons';
 import { InsurancePlan } from '../../../types';
 import { PLAN_MESSAGES, ACTIVATION_STEPS, PLAN_HIGHLIGHTS, PROGRESS_CONFIG } from './constants';
+import TierBadge from '../../TierBadges/TierBadges';
 import './PlanDetails.css';
 
 const { Title, Text, Paragraph } = Typography;
@@ -49,6 +59,17 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
   };
 
   const selectedPlan = getSelectedPlan();
+
+  // Define tier colors for both card and modal
+  const tierColors = {
+    Bronze: { color: '#CD7F32', light: '#E8A87C', rgb: '205, 127, 50' },
+    Silver: { color: '#71717a', light: '#a1a1aa', rgb: '113, 113, 122' },
+    Gold: { color: '#F59E0B', light: '#FBBF24', rgb: '245, 158, 11' },
+  };
+  
+  const currentTier = selectedPlan 
+    ? (tierColors[selectedPlan.tier as keyof typeof tierColors] || tierColors.Silver)
+    : tierColors.Silver;
 
   const showPlanModal = () => setIsModalVisible(true);
   const handleModalClose = () => setIsModalVisible(false);
@@ -233,31 +254,26 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
           footer={null}
           width={600}
           className="plan-details-modal"
+          style={{
+            '--tier-color': currentTier.color,
+            '--tier-color-light': currentTier.light,
+            '--tier-rgb': currentTier.rgb,
+          } as React.CSSProperties}
         >
           {selectedPlan ? (
             <>
-              <div className="modal-header">
-                <div className="modal-icon-wrapper">
-                  <CrownOutlined className="modal-icon" />
+              <div className="modal-header" style={{
+                '--tier-color': currentTier.color,
+                '--tier-rgb': currentTier.rgb,
+              } as React.CSSProperties}>
+                <div className="modal-tier-badge-compact">
+                  <div>
+                    <TierBadge tier={selectedPlan.tier} size={90} />
+                  </div>
+                  <span className="modal-tier-name">{selectedPlan.tier}</span>
                 </div>
                 <Title level={2} className="modal-title">{selectedPlan.name}</Title>
-                <Tag color="orange" className="modal-badge">
-                  <StarFilled /> {selectedPlan.category === 'premium' ? 'POPULAR CHOICE' : 'SELECTED PLAN'}
-                </Tag>
-              </div>
-
-              <Divider />
-
-              <div className="modal-pricing">
-                <div className="pricing-main">
-                  <Text className="price-label">Monthly Premium</Text>
-                  <div className="price-display">
-                    <span className="price-currency">{selectedPlan.currency}</span>
-                    <span className="price-value">{selectedPlan.price}</span>
-                    <span className="price-period">/{selectedPlan.billingCycle}</span>
-                  </div>
-                  <Text className="price-subtitle">Billed {selectedPlan.billingCycle}ly • Cancel anytime</Text>
-                </div>
+                <Text className="modal-subtitle">{selectedPlan.category?.charAt(0).toUpperCase() + selectedPlan.category?.slice(1)} Coverage Plan</Text>
               </div>
 
               <Divider>Coverage Details</Divider>
@@ -265,44 +281,44 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
               <div className="modal-features">
                 <Row gutter={[16, 16]}>
                   {selectedPlan.features.map((feature, index) => (
-                <Col span={12} key={index}>
-                  <div className="modal-feature-item">
-                    <CheckCircleOutlined className="modal-feature-icon" />
-                    <Text>{feature}</Text>
+                    <Col span={12} key={index}>
+                      <div className="modal-feature-item">
+                        <CheckCircleOutlined className="modal-feature-icon" />
+                        <Text>{feature}</Text>
+                      </div>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+
+              <Divider />
+
+              <div className="modal-highlights">
+                <Title level={5}>Why This Plan?</Title>
+                <div className="highlight-grid">
+                  <div className="highlight-card">
+                    <SafetyOutlined className="highlight-icon" />
+                    <Text strong>{PLAN_HIGHLIGHTS.COMPREHENSIVE.title}</Text>
+                    <Text type="secondary">{PLAN_HIGHLIGHTS.COMPREHENSIVE.description}</Text>
                   </div>
-                </Col>
-              ))}
-            </Row>
-          </div>
-
-          <Divider />
-
-          <div className="modal-highlights">
-            <Title level={5}>Why This Plan?</Title>
-            <div className="highlight-grid">
-              <div className="highlight-card">
-                <SafetyOutlined className="highlight-icon" />
-                <Text strong>{PLAN_HIGHLIGHTS.COMPREHENSIVE.title}</Text>
-                <Text type="secondary">{PLAN_HIGHLIGHTS.COMPREHENSIVE.description}</Text>
+                  <div className="highlight-card">
+                    <CheckCircleOutlined className="highlight-icon" />
+                    <Text strong>{PLAN_HIGHLIGHTS.INSTANT.title}</Text>
+                    <Text type="secondary">{PLAN_HIGHLIGHTS.INSTANT.description}</Text>
+                  </div>
+                  <div className="highlight-card">
+                    <StarFilled className="highlight-icon" />
+                    <Text strong>{PLAN_HIGHLIGHTS.SUPPORT.title}</Text>
+                    <Text type="secondary">{PLAN_HIGHLIGHTS.SUPPORT.description}</Text>
+                  </div>
+                </div>
               </div>
-              <div className="highlight-card">
-                <CheckCircleOutlined className="highlight-icon" />
-                <Text strong>{PLAN_HIGHLIGHTS.INSTANT.title}</Text>
-                <Text type="secondary">{PLAN_HIGHLIGHTS.INSTANT.description}</Text>
-              </div>
-              <div className="highlight-card">
-                <StarFilled className="highlight-icon" />
-                <Text strong>{PLAN_HIGHLIGHTS.SUPPORT.title}</Text>
-                <Text type="secondary">{PLAN_HIGHLIGHTS.SUPPORT.description}</Text>
-              </div>
-            </div>
-          </div>
 
-          <div className="modal-footer-actions">
-            <Button type="primary" size="large" onClick={handleModalClose} block>
-              Close
-            </Button>
-          </div>
+              <div className="modal-footer-actions">
+                <Button type="primary" size="large" onClick={handleModalClose} block>
+                  Close
+                </Button>
+              </div>
             </>
           ) : (
             <div style={{ padding: '40px', textAlign: 'center' }}>
@@ -316,7 +332,15 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
 
   // Active plan view (when plan exists)
   return (
-    <Card className="plan-details-card" loading={loading}>
+    <Card 
+      className="plan-details-card" 
+      loading={loading}
+      style={{
+        '--tier-color': currentTier.color,
+        '--tier-color-light': currentTier.light,
+        '--tier-rgb': currentTier.rgb,
+      } as React.CSSProperties}
+    >
       <div className="plan-header">
         <div className="plan-title-section">
           <SafetyOutlined className="plan-icon" />
@@ -324,9 +348,9 @@ const PlanDetails: React.FC<PlanDetailsProps> = ({ plan, dashboardData, loading 
             <Title level={3} className="plan-name">{plan.name}</Title>
           </div>
         </div>
-        <div className="plan-price">
-          <Text className="price-amount">{plan.currency} {plan.price}</Text>
-          <Text className="price-period">/{plan.billingCycle}</Text>
+        <div className="plan-tier-badge">
+          <TierBadge tier={plan.tier} size={70} />
+          <span className="tier-name-text">{plan.tier}</span>
         </div>
       </div>
 

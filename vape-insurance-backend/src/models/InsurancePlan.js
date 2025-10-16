@@ -36,6 +36,11 @@ const insurancePlanSchema = new mongoose.Schema({
     enum: ['basic', 'premium', 'complete'],
     required: true
   },
+  tier: {
+    type: String,
+    enum: ['Bronze', 'Silver', 'Gold', 'Platinum'],
+    required: true
+  },
   isActive: {
     type: Boolean,
     default: true
@@ -45,7 +50,9 @@ const insurancePlanSchema = new mongoose.Schema({
     default: 0
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
 
 // Indexes

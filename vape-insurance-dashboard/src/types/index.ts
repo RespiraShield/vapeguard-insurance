@@ -25,6 +25,7 @@ export interface InsurancePlan {
   billingCycle: string;
   features: string[];
   category: 'basic' | 'premium' | 'complete';
+  tier: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
   isActive: boolean;
 }
 
