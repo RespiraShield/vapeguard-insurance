@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Alert, Typography, Spin } from 'antd';
-import { CheckCircleOutlined, ClockCircleOutlined, RightOutlined } from '@ant-design/icons';
+import { 
+  CheckCircleOutlined, 
+  ClockCircleOutlined, 
+  RightOutlined
+} from '@ant-design/icons';
 import { INSURANCE_SELECTION_STEP } from '../../constants/texts';
+import TierBadge from '../TierBadges/TierBadges';
 import styles from './InsuranceSelectionStep.module.css';
 
 const { Title, Text } = Typography;
@@ -91,18 +96,21 @@ const InsuranceSelectionStep = ({
                     {plan.popular && (
                       <span className={styles.popularTag}>POPULAR</span>
                     )}
+                    <div className={styles.tierContainer}>
+                      <div className={styles.tierBadgeWrapper}>
+                        <TierBadge tier={plan.tier} size={90} />
+                      </div>
+                      <div className={styles.tierInfo}>
+                        <span className={styles.tierBadge}>
+                          {plan.tier}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <span className={styles.planDescription}>
                     {plan.description || 'Comprehensive insurance coverage'}
                   </span>
                 </div>
-              </div>
-              <div className={styles.planRight}>
-                <div className={styles.priceContainer}>
-                  <span className={styles.price}>₹{plan.price}</span>
-                  <span className={styles.period}>/year</span>
-                </div>
-                <div className={styles.billingInfo}>Billed Yearly</div>
               </div>
             </div>
             
@@ -148,8 +156,8 @@ const InsuranceSelectionStep = ({
           <div className={styles.skipButtonContent}>
             <ClockCircleOutlined className={styles.skipIcon} />
             <div className={styles.skipTextContainer}>
-              <span className={styles.skipTitle}>I'll Choose a Plan Later</span>
-              <span className={styles.skipSubtitle}>You can select your insurance plan after reviewing your options</span>
+              <span className={styles.skipTitle}>Skip for Now</span>
+              <span className={styles.skipSubtitle}>Continue and choose your plan later</span>
             </div>
             <RightOutlined className={styles.skipArrow} />
           </div>

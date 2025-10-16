@@ -1,4 +1,5 @@
 import React from 'react';
+import TierBadge from '../TierBadges/TierBadges';
 import './EnrollmentStep.css';
 
 const EnrollmentStep = ({ 
@@ -13,10 +14,10 @@ const EnrollmentStep = ({
   return (
     <div className="enrollment-step">
       <div className="enrollment-header">
-        <h2>Enroll Now, Pay Later</h2>
+        <h2>Complete Your Enrollment</h2>
         <p className="enrollment-subtitle">
           {selectedPlan 
-            ? 'Complete your enrollment today and pay when convenient for you'
+            ? 'Secure your coverage and join our community'
             : 'Complete your enrollment and choose your plan later'
           }
         </p>
@@ -24,9 +25,38 @@ const EnrollmentStep = ({
 
       <div className="enrollment-card">
         {selectedPlan && (
-          <div className="plan-summary">
-            <h3>{selectedPlan.name}</h3>
-            <div className="plan-price">₹{selectedPlan.price}</div>
+          <div 
+            className="plan-summary"
+            style={{
+              '--tier-color': 
+                selectedPlan.tier === 'Bronze' ? '#CD7F32' :
+                selectedPlan.tier === 'Silver' ? '#71717a' :
+                selectedPlan.tier === 'Gold' ? '#F59E0B' :
+                '#6366f1',
+              '--tier-color-light':
+                selectedPlan.tier === 'Bronze' ? '#E8A87C' :
+                selectedPlan.tier === 'Silver' ? '#a1a1aa' :
+                selectedPlan.tier === 'Gold' ? '#FBBF24' :
+                '#818cf8',
+              '--tier-rgb':
+                selectedPlan.tier === 'Bronze' ? '205, 127, 50' :
+                selectedPlan.tier === 'Silver' ? '113, 113, 122' :
+                selectedPlan.tier === 'Gold' ? '245, 158, 11' :
+                '99, 102, 241'
+            }}
+          >
+            <div className="plan-header-section">
+              <h3>{selectedPlan.name}</h3>
+              <div className="tier-indicator">
+                <div>
+                  <TierBadge tier={selectedPlan.tier} size={90} />
+                </div>
+                <span className="tier-name">{selectedPlan.tier}</span>
+              </div>
+            </div>
+            <p className="plan-category-text">
+              {selectedPlan.category?.charAt(0).toUpperCase() + selectedPlan.category?.slice(1)} Coverage Plan
+            </p>
           </div>
         )}
         
@@ -125,7 +155,7 @@ const EnrollmentStep = ({
             onClick={onEnrollNow}
             disabled={loading}
           >
-            {loading ? 'Processing Enrollment...' : 'Enroll Now & Pay Later'}
+            {loading ? 'Processing Enrollment...' : 'Complete Enrollment'}
           </button>
           
           <div className="enrollment-terms">

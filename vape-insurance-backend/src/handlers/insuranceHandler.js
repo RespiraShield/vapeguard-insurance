@@ -5,12 +5,15 @@ const Application = require('../models/Application');
  * Clean separation of insurance logic from routes
  */
 
-// Predefined insurance plans
+// Predefined insurance plans with smart tier categorization
 const INSURANCE_PLANS = [
   {
     id: 1,
     name: 'Basic Respiratory Care',
     price: '₹149/purchase',
+    category: 'basic',
+    tier: 'Bronze',
+    description: 'Essential respiratory care coverage for everyday protection',
     features: [
       'Lung function monitoring',
       'Basic respiratory health check',
@@ -19,12 +22,16 @@ const INSURANCE_PLANS = [
       'Emergency respiratory support'
     ],
     coverage: '₹50,000',
-    duration: '1 year'
+    duration: '1 year',
+    popular: false
   },
   {
     id: 2,
     name: 'Premium Respiratory Care',
     price: '₹299/purchase',
+    category: 'premium',
+    tier: 'Silver',
+    description: 'Advanced respiratory care with specialist consultations',
     features: [
       'All Basic features',
       'Advanced lung imaging (CT scan)',
@@ -34,12 +41,16 @@ const INSURANCE_PLANS = [
       'Annual health checkup'
     ],
     coverage: '₹1,00,000',
-    duration: '1 year'
+    duration: '1 year',
+    popular: true
   },
   {
     id: 3,
     name: 'Complete Health Guard',
     price: '₹499/purchase',
+    category: 'complete',
+    tier: 'Gold',
+    description: 'Comprehensive health coverage with premium benefits',
     features: [
       'All Premium features',
       'Full body health screening',
@@ -50,7 +61,8 @@ const INSURANCE_PLANS = [
       '24/7 health helpline'
     ],
     coverage: '₹2,00,000',
-    duration: '1 year'
+    duration: '1 year',
+    popular: false
   }
 ];
 

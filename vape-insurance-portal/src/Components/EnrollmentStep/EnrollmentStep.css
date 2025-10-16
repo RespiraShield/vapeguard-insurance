@@ -31,28 +31,107 @@
 }
 
 .plan-summary {
-  text-align: center;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 8px;
+  padding: 0;
+  background: #ffffff;
+  border-radius: 16px;
   margin-bottom: 30px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.plan-summary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--tier-color, #6366f1) 0%, var(--tier-color-light, #818cf8) 100%);
+}
+
+.plan-summary:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #d1d5db;
+}
+
+.plan-header-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 28px 20px 28px;
+  background: #ffffff;
 }
 
 .plan-summary h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 10px 0;
+  font-size: 1.875rem;
+  font-weight: 800;
+  margin: 0;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  flex: 1;
+}
+
+.tier-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px 6px 6px;
+  background: rgba(var(--tier-rgb, 99, 102, 241), 0.08);
+  border-radius: 8px;
+  border: 1px solid rgba(var(--tier-rgb, 99, 102, 241), 0.15);
+  flex-shrink: 0;
+}
+
+.tier-indicator > div {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 6px;
+}
+
+.tier-indicator img {
+  width: 28px !important;
+  height: 28px !important;
+  max-width: 28px !important;
+  object-fit: contain;
+}
+
+.tier-indicator .tier-name {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--tier-color, #6366f1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.plan-category-text {
+  padding: 0 28px 28px 28px;
+  margin: 0;
+  font-size: 0.9375rem;
+  color: #6b7280;
+  font-weight: 500;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .plan-summary.no-plan-selected {
   background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
   color: #1a1a1a;
   border: 2px solid #d1d5db;
+  box-shadow: none;
 }
 
 .plan-summary.no-plan-selected h3 {
   color: #1a1a1a;
+  text-shadow: none;
 }
 
 .no-plan-message {
@@ -62,12 +141,6 @@
   line-height: 1.6;
   font-weight: 500;
   margin-bottom: 0;
-}
-
-.plan-price {
-  font-size: 2rem;
-  font-weight: 700;
-  margin: 0;
 }
 
 .enrollment-benefits {
@@ -231,6 +304,41 @@
   
   .enrollment-card {
     padding: 20px;
+  }
+  
+  .plan-header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 24px 20px 16px 20px;
+  }
+  
+  .plan-summary h3 {
+    font-size: 1.5rem;
+  }
+  
+  .tier-indicator {
+    padding: 5px 14px 5px 5px;
+    gap: 8px;
+  }
+  
+  .tier-indicator > div {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .tier-indicator img {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  
+  .tier-indicator .tier-name {
+    font-size: 0.75rem;
+  }
+  
+  .plan-category-text {
+    padding: 0 20px 24px 20px;
+    font-size: 0.875rem;
   }
   
   .benefits-grid {

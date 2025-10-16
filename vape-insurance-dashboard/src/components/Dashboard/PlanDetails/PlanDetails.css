@@ -1,64 +1,97 @@
 /* Plan Details Styles */
 .plan-details-card {
-  border-radius: 12px;
-  border: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #e5e7eb;
+}
+
+.plan-details-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--tier-color, #6366f1) 0%, var(--tier-color-light, #818cf8) 100%);
+}
+
+.plan-details-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #d1d5db;
 }
 
 .plan-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
+  align-items: center;
+  padding-bottom: 24px;
   border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 24px;
 }
 
 .plan-title-section {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
 }
 
 .plan-icon {
-  font-size: 24px;
-  color: #667eea;
-  margin-top: 4px;
+  font-size: 32px;
+  color: #1890ff;
 }
 
 .plan-name {
-  margin: 0 0 8px 0 !important;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.popular-badge {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.plan-type-tag {
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.plan-price {
-  text-align: right;
-}
-
-.price-amount {
+  margin: 0 !important;
   font-size: 24px;
   font-weight: 700;
-  color: #1f2937;
-  display: block;
 }
 
-.price-period {
-  color: #6b7280;
-  font-size: 14px;
+.plan-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px 6px 6px;
+  background: rgba(var(--tier-rgb, 99, 102, 241), 0.08);
+  border-radius: 8px;
+  border: 1px solid rgba(var(--tier-rgb, 99, 102, 241), 0.15);
+  flex-shrink: 0;
+}
+
+.plan-tier-badge > div {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 6px;
+}
+
+.plan-tier-badge img {
+  width: 28px !important;
+  height: 28px !important;
+  max-width: 28px !important;
+  object-fit: contain;
+}
+
+.tier-name-text {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--tier-color, #6366f1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.tier-category {
+  font-size: 12px;
+  text-transform: capitalize;
+  font-weight: 500;
 }
 
 .plan-descriptions {
@@ -406,8 +439,23 @@
     gap: 16px;
   }
   
-  .plan-price {
-    text-align: left;
+  .plan-tier-badge {
+    padding: 5px 14px 5px 5px;
+    gap: 8px;
+  }
+  
+  .plan-tier-badge > div {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .plan-tier-badge img {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  
+  .tier-name-text {
+    font-size: 0.75rem;
   }
   
   .features-grid {
@@ -450,94 +498,96 @@
 .plan-details-modal .ant-modal-content {
   border-radius: 16px;
   overflow: hidden;
+  position: relative;
+}
+
+.plan-details-modal .ant-modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--tier-color, #6366f1) 0%, var(--tier-color-light, #818cf8) 100%);
+  z-index: 1;
 }
 
 .modal-header {
-  text-align: center;
-  padding: 20px 24px;
-  background: #f8fafc;
-  margin: -24px -24px 16px;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.modal-icon-wrapper {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 12px;
-  background: #667eea;
-  border-radius: 50%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.25);
-}
-
-.modal-icon {
-  font-size: 28px;
-  color: white;
-}
-
-.modal-title {
-  margin: 0 !important;
-  color: #1f2937;
-  font-size: 22px !important;
-}
-
-.modal-badge {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 12px;
-  margin-top: 12px;
-}
-
-.modal-pricing {
   text-align: center;
-  padding: 20px;
-  background: #eff6ff;
+  padding: 32px 28px 24px 28px;
+  background: #ffffff;
+}
+
+.modal-tier-badge-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px 6px 6px;
+  background: rgba(var(--tier-rgb, 99, 102, 241), 0.08);
   border-radius: 8px;
+  border: 1px solid rgba(var(--tier-rgb, 99, 102, 241), 0.15);
   margin-bottom: 20px;
 }
 
-.pricing-main {
+.modal-tier-badge-compact > div {
+  width: 40px;
+  height: 40px;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.price-label {
-  color: #6b7280;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.price-display {
-  display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
-  gap: 4px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 6px;
 }
 
-.price-currency {
-  font-size: 24px;
-  font-weight: 600;
-  color: #1f2937;
+.modal-tier-badge-compact img {
+  width: 28px !important;
+  height: 28px !important;
+  max-width: 28px !important;
+  object-fit: contain;
 }
 
-.price-value {
-  font-size: 40px;
+.modal-tier-name {
+  font-size: 0.8125rem;
   font-weight: 700;
-  color: #1f2937;
-  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--tier-color, #6366f1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.price-period {
-  font-size: 18px;
-  color: #6b7280;
+.modal-title {
+  margin: 0 0 8px 0 !important;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.price-subtitle {
+.modal-subtitle {
+  font-size: 0.9375rem;
   color: #6b7280;
+  font-weight: 500;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.tier-type {
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: capitalize;
+  color: #6c757d;
+}
+
+.tier-subtitle {
+  color: #6c757d;
   font-size: 13px;
+  margin-top: 8px;
+  font-weight: 500;
 }
 
 .modal-features {
@@ -629,7 +679,35 @@
   }
 
   .modal-header {
-    padding: 16px;
+    padding: 28px 20px 20px 20px;
+  }
+
+  .modal-tier-badge-compact {
+    padding: 5px 14px 5px 5px;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .modal-tier-badge-compact > div {
+    width: 34px;
+    height: 34px;
+  }
+
+  .modal-tier-badge-compact img {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .modal-tier-name {
+    font-size: 0.75rem;
+  }
+
+  .modal-title {
+    font-size: 1.625rem !important;
+  }
+
+  .modal-subtitle {
+    font-size: 0.875rem;
   }
 
   .modal-icon-wrapper {
@@ -652,29 +730,22 @@
     margin-top: 8px;
   }
 
-  .modal-pricing {
-    padding: 16px 12px;
+  .modal-tier-info {
+    padding: 20px 16px;
     margin-bottom: 16px;
   }
-
-  .price-label {
-    font-size: 12px;
+  
+  .modal-tier-badge {
+    transform: scale(0.7) !important;
   }
-
-  .price-currency {
-    font-size: 20px;
+  
+  .modal-tier-name {
+    font-size: 22px;
+    letter-spacing: 1px;
   }
-
-  .price-value {
-    font-size: 32px;
-  }
-
-  .price-period {
-    font-size: 16px;
-  }
-
-  .price-subtitle {
-    font-size: 12px;
+  
+  .tier-type {
+    font-size: 14px;
   }
 
   .modal-features {
